@@ -1,0 +1,51 @@
+%%==========================================================================
+%%  saus-poster-starter.tex
+%%  Copy this file next to the "assets" folder (with saus-poster.cls,
+%%  saus-brand.sty and .latexmkrc), then:  latexmk saus-poster-starter.tex
+%%
+%%  Layout: boxes stack in columns. "below=<name>" places a box under
+%%  another; "between=<name> and bottom" stretches the last box of a
+%%  column down to the footer. Add the class option "grid" to see the grid.
+%%==========================================================================
+\documentclass[size=a0]{saus-poster}   % a0|a1|a2|a3, landscape, header=photo|solid|light
+
+\title{Your poster title}
+\subtitle{An optional subtitle}
+\author{First Author, Second Author}
+\affiliation{Department of \dots, The Shaikh Ayaz University, Shikarpur}
+\sausevent{Conference or event, 2026}
+\sauscontact{First Author\\ name@example.org}
+\sausqr{https://saus.edu.pk}{saus.edu.pk}   % \sausqr{}{} removes the QR code
+
+\begin{document}
+\begin{sausposter}
+
+\sausbox{name=intro,column=1,below=top}{Introduction}{%
+  Text of the introduction.}
+
+\sauscard{name=aims,column=1,below=intro}{Aims}{%
+  \begin{itemize}
+    \item First aim
+    \item Second aim
+  \end{itemize}}
+
+\sausbox{name=method,column=1,between=aims and bottom}{Method}{%
+  How the work was done.}
+
+\sausaccent{name=finding,column=2,below=top}{Key finding}{%
+  The one result a passer-by should remember.}
+
+\sausbox{name=results,column=2,between=finding and bottom}{Results}{%
+  \sausfigure{\sausasset{saus-title-bg.jpg}}{A figure with a numbered caption.}}
+
+\sausblock{name=conclusion,column=3,below=top}{Conclusion}{%
+  What it means.}
+
+\sausbox{name=refs,column=3,between=conclusion and bottom}{References}{%
+  {\small
+  \begin{enumerate}
+    \item Author, \emph{Title}, Journal, Year.
+  \end{enumerate}}}
+
+\end{sausposter}
+\end{document}

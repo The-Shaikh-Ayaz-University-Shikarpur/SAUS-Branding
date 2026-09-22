@@ -1,0 +1,36 @@
+%%==========================================================================
+%%  saus-certificate-starter.tex
+%%  Copy this file next to the "assets" folder (with saus-certificate.cls,
+%%  saus-brand.sty and .latexmkrc), then:  latexmk saus-certificate-starter.tex
+%%
+%%  Options:  \documentclass[style=modern]{saus-certificate}   classic|modern
+%%            \documentclass[size=letter]{...}                 a4|letter
+%%            \documentclass[native=sindhi]{...}               sindhi|urdu|both|none
+%%            \documentclass[sign=1]{...}                      signature images
+%%            \documentclass[seal=false]{...}                  no gold seal
+%%==========================================================================
+\documentclass[style=classic,sign=0]{saus-certificate}
+
+%% ---- Issuer ----------------------------------------------------------------
+\sausdepartment{Department of ...}          % shown under the university name
+% Up to three signatories, left to right. [image] is used with sign=1.
+\signatory{Name}{Designation}
+% \signatory[signature.png]{Name}{Designation}
+
+%% ---- Certificate text --------------------------------------------------------
+\certificatetitle{Certificate}{of Participation}   % or of Achievement, ...
+% \certificatecertify{This is to certify that}     % line above the name
+\certificatebody{has participated in ... held on ...}
+% \certificatedate{1 October 2026}                 % defaults to today
+\certificateserial{SAUS/.../2026/\thecertificate}  % 0 hides the number
+% \certificateverify{https://...?no=\certificatenumber}   % QR code
+
+\begin{document}
+
+\makecertificate{Recipient Name}
+% \makecertificate[serial=0, body={...}]{Another Name}
+
+%% A batch from a CSV file with the columns "name" and "serial":
+% \makecertificatesfromcsv{participants.csv}
+
+\end{document}

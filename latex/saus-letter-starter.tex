@@ -1,0 +1,56 @@
+%%==========================================================================
+%%  saus-letter-starter.tex
+%%  Copy this file next to the "assets" folder (with saus-letter.cls,
+%%  saus-brand.sty and .latexmkrc), then:  latexmk saus-letter-starter.tex
+%%
+%%  Options:  \documentclass[mono]{saus-letter}       black-and-white printers
+%%            \documentclass[native=sindhi]{...}      sindhi|urdu|both|none
+%%            \documentclass[foldmarks]{...}          DIN fold marks
+%%            \documentclass[sign=1]{...}             add the signature image
+%%            \documentclass[closing=right]{...}      closing and signature on the right
+%%==========================================================================
+% sign=1: signature image, sign=0: none | closing=left or closing=right
+\documentclass[sign=0,closing=left]{saus-letter}
+
+%% ---- Sender (set once per office) ----------------------------------------
+\sausdepartment{Office of the ...}
+% \sausemail{office@saus.edu.pk}
+% \sausphone{+92 ...}                    % direct line instead of the main number
+\setkomavar{signature}{Name\\ Designation}
+% With sign=1 the image is read from signature-trans.png next to this file.
+% Keep it out of the shared templates folder. Another file or height:
+% \saussignimage[17mm]{path/to/signature.png}
+
+%% ---- This letter ----------------------------------------------------------
+\setkomavar{myref}{SAUS/.../2026/...}   % "Ref. No.", same line as the date; {0} hides it
+% \setkomavar{yourref}{...}              % "Your ref.", added to that line
+% \setkomavar{date}{1 October 2026}      % defaults to today
+\setkomavar{subject}{Subject of the letter}
+
+\begin{document}
+\begin{letter}{%
+  Recipient Name\\
+  Designation, Organisation\\
+  Address}
+
+\opening{Dear Sir/Madam,}
+
+Body of the letter.
+
+\closing{Yours sincerely,}
+
+% \encl{...}
+% \cc{...}
+\end{letter}
+
+%% ---- A notification, office order or circular (no addressee) --------------
+%% \sausnotice moves the reference line up and sets a centred title:
+% \begin{letter}{}
+%   \sausnotice{Notification}
+%   \setkomavar{subject}{...}            % optional
+%   \opening{}
+%   Text of the notification.
+%   \closing{}
+% \end{letter}
+
+\end{document}

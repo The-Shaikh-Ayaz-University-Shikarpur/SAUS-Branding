@@ -1,0 +1,40 @@
+# The Office fonts are installed, not shipped: fonts/ is a local drop box.
+# The LaTeX build's Sindhi/Urdu fonts live in latex/assets/fonts and are kept.
+fonts/*
+!fonts/README.md
+
+# Real signatures: never commit one. See brand-source/README.md.
+signature-trans.png
+signature*.png
+!latex/assets/signature-specimen.png
+
+# LaTeX build files
+*.aux
+*.log
+*.fls
+*.fdb_latexmk
+*.out
+*.nav
+*.snm
+*.toc
+*.lof
+*.lot
+*.vrb
+*.synctex.gz
+*.xdv
+*.bbl
+*.bcf
+*.blg
+*.run.xml
+build/
+
+# Office lock files left by an open document
+~$*
+
+# Python
+__pycache__/
+*.pyc
+
+# OS
+Thumbs.db
+.DS_Store

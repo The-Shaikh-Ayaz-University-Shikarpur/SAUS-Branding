@@ -1,0 +1,12 @@
+# For the Office builders in powerpoint/source, word/source, excel/source and
+# brand-source. The LaTeX templates need none of this -- see README.md.
+#
+#     pip install -r requirements.txt
+#
+# Versions the templates in this repository were generated with; newer ones
+# should work.
+python-docx>=1.2.0
+python-pptx>=1.0.2
+openpyxl>=3.1.5
+pillow>=11.1.0
+lxml>=6.1.1

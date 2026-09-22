@@ -1,0 +1,537 @@
+%%==========================================================================
+%%  beamerthemeSAUS.sty
+%%  Official Beamer theme for
+%%  THE SHAIKH AYAZ UNIVERSITY, SHIKARPUR
+%%  "Revival of Educational Glory of Shikarpur"
+%%
+%%  https://saus.edu.pk  |  Main Road, Shikarpur, Sindh  |  +92 726 512039
+%%
+%%  Version 1.3 -- 2026-09-21
+%%  Build with LuaLaTeX (recommended) or XeLaTeX. pdfLaTeX also works,
+%%  without maths fonts or Sindhi/Urdu. Fonts: see saus-brand.sty.
+%%==========================================================================
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{beamerthemeSAUS}[2026/09/21 v1.3 Shaikh Ayaz University Shikarpur]
+
+\RequirePackage{etoolbox}
+\RequirePackage{kvoptions}
+\RequirePackage{xcolor}
+\RequirePackage{tikz}
+\RequirePackage[export]{adjustbox}
+\usetikzlibrary{calc,fadings}
+
+%%--------------------------------------------------------------------------
+%% 1. PACKAGE OPTIONS
+%%--------------------------------------------------------------------------
+\SetupKeyvalOptions{family=saus,prefix=saus@}
+
+% titlestyle = photo | solid | split
+\DeclareStringOption[photo]{titlestyle}
+% path (with trailing slash) where the branding assets live
+\DeclareStringOption[assets/]{assets}
+% background photograph used by titlestyle=photo
+\DeclareStringOption[saus-title-bg.jpg]{titleimage}
+% logo = corner | none  (crest in the top-right corner of content slides)
+\DeclareStringOption[corner]{logo}
+% numbering = counter | fraction | none
+\DeclareStringOption[counter]{numbering}
+% align = top | center  (vertical placement of frame content)
+\DeclareStringOption[top]{align}
+% thin progress rule above the footer band
+\DeclareBoolOption[true]{progressbar}
+% automatic full-bleed divider slide at every \section
+\DeclareBoolOption[true]{sectionpages}
+% let the theme pick its typefaces (bundled fonts under Xe/LuaLaTeX)
+\DeclareBoolOption[true]{fonts}
+% ragged-right body text instead of justified
+\DeclareBoolOption[true]{raggedright}
+% native = sindhi | urdu | both | none  (native-script name on title/closing)
+\DeclareStringOption[sindhi]{native}
+% mute overlay-covered material instead of hiding it
+\DeclareBoolOption[false]{transparentcovered}
+\ProcessKeyvalOptions*
+
+%%--------------------------------------------------------------------------
+%% 2. BRAND LAYER (colours, identity, typography -- see saus-brand.sty)
+%%--------------------------------------------------------------------------
+\edef\saus@brandopts{assets=\saus@assets,native=\saus@native,%
+  fonts=\ifsaus@fonts true\else false\fi}
+\expandafter\RequirePackage\expandafter[\saus@brandopts]{saus-brand}
+
+\ifsaus@fonts\usefonttheme{professionalfonts}\fi
+
+\setbeamerfont{title}{size=\LARGE,family=\sausdisplayfamily,series=\sausdisplayseries}
+\setbeamerfont{subtitle}{size=\large,series=\sauslightfont}
+\setbeamerfont{author}{size=\normalsize}
+\setbeamerfont{institute}{size=\small}
+\setbeamerfont{date}{size=\small}
+\setbeamerfont{frametitle}{size=\Large,family=\sausdisplayfamily,series=\sausdisplayseries}
+\setbeamerfont{framesubtitle}{size=\small,series=\sauslightfont}
+\setbeamerfont{footline}{size=\tiny}
+\setbeamerfont{block title}{size=\normalsize,series=\bfseries}
+\setbeamerfont{block body}{size=\normalsize}
+\setbeamerfont{caption}{size=\footnotesize}
+\setbeamerfont{caption name}{size=\footnotesize,series=\bfseries}
+
+%%--------------------------------------------------------------------------
+%% 3. COLOUR ASSIGNMENTS
+%%--------------------------------------------------------------------------
+\setbeamercolor{normal text}{fg=sausink,bg=white}
+\setbeamercolor{structure}{fg=sausmaroon}
+\setbeamercolor{alerted text}{fg=sausred}
+\setbeamercolor{example text}{fg=sausgreen}
+
+\setbeamercolor{title}{fg=white}
+\setbeamercolor{subtitle}{fg=white}
+\setbeamercolor{author}{fg=white}
+\setbeamercolor{institute}{fg=white}
+\setbeamercolor{date}{fg=white}
+
+\setbeamercolor{frametitle}{fg=sausmaroon,bg=}
+\setbeamercolor{framesubtitle}{fg=sausslate,bg=}
+\setbeamercolor{footline}{fg=white,bg=sausmaroon}
+
+\setbeamercolor{block title}{fg=white,bg=sausmaroon}
+\setbeamercolor{block body}{fg=sausink,bg=sausmist}
+\setbeamercolor{block title alerted}{fg=white,bg=sausred}
+\setbeamercolor{block body alerted}{fg=sausink,bg=sausred!7}
+\setbeamercolor{block title example}{fg=white,bg=sausblue}
+\setbeamercolor{block body example}{fg=sausink,bg=sausblue!6}
+
+\setbeamercolor{itemize item}{fg=sausmaroon}
+\setbeamercolor{itemize subitem}{fg=sausblue}
+\setbeamercolor{itemize subsubitem}{fg=sausgold}
+\setbeamercolor{enumerate item}{fg=sausmaroon}
+\setbeamercolor{description item}{fg=sausmaroon}
+
+\setbeamercolor{section in toc}{fg=sausink}
+\setbeamercolor{subsection in toc}{fg=sausslate}
+\setbeamercolor{caption name}{fg=sausmaroon}
+\setbeamercolor{bibliography item}{fg=sausmaroon}
+\setbeamercolor{bibliography entry author}{fg=sausmaroon}
+\setbeamercolor{button}{fg=white,bg=sausmaroon}
+\setbeamercolor{separation line}{fg=sausrule}
+\setbeamercolor{background canvas}{bg=white}
+
+\ifsaus@transparentcovered
+  \setbeamercovered{transparent=18}
+\else
+  \setbeamercovered{invisible}
+\fi
+
+%%--------------------------------------------------------------------------
+%% 4. GEOMETRY AND GLOBAL FURNITURE
+%%--------------------------------------------------------------------------
+\newlength{\sausmargin}
+\setlength{\sausmargin}{1.1cm}
+\newlength{\saus@ftright}
+\newlength{\saus@pbwd}
+
+\setbeamersize{text margin left=\sausmargin,text margin right=\sausmargin}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{sidebar right}{}
+
+\providecommand{\insertsectionnumber}{\thesection}
+
+% Content sits under the frame title by default; align=center restores
+% beamer's vertical centring (equivalent to the class option "c").
+\ifdefstring{\saus@align}{center}{\beamer@centeredtrue}{\beamer@centeredfalse}
+
+% Beamer spreads table-of-contents entries with \vfill, which looks stretched
+% on a short outline. Replace it with a fixed leading.
+\ifdefined\beamer@sectionintoc
+  \patchcmd{\beamer@sectionintoc}{\vfill}{\vskip1.4ex}{}{}
+\fi
+
+% Ragged-right body text. \beamer@checkframetitle runs inside the frame's
+% body box immediately before the content, so this reaches every slide.
+% Blocks re-apply it themselves because their colour boxes reset \rightskip.
+\RequirePackage{ragged2e}
+\newcommand{\saus@bodyalign}{}
+\ifsaus@raggedright
+  \renewcommand{\saus@bodyalign}{\RaggedRight}
+  \pretocmd{\beamer@checkframetitle}{\saus@bodyalign}{}{%
+    \PackageWarning{beamerthemeSAUS}{Could not set ragged-right body text}}
+\fi
+\newcommand{\saus@blockalign}{%
+  \ifsaus@raggedright\RaggedRight\leftskip=0.7em\relax\addtolength{\rightskip}{0.7em}\fi}
+
+\ifdefstring{\saus@logo}{corner}{%
+  \setlength{\saus@ftright}{\dimexpr\sausmargin+1.75cm\relax}%
+  \newcommand{\saus@cornercrest}{%
+    \tikz[remember picture,overlay]{%
+      \node[anchor=north east,inner sep=0pt]
+        at ([shift={(-\sausmargin,-0.42cm)}]current page.north east)
+        {\includegraphics[height=1.15cm]{\sauslogo}};}%
+  }%
+}{%
+  \setlength{\saus@ftright}{\sausmargin}%
+  \newcommand{\saus@cornercrest}{}%
+}
+
+%%--------------------------------------------------------------------------
+%% 5. FRAME TITLE
+%%--------------------------------------------------------------------------
+\setbeamertemplate{frametitle}{%
+  \nointerlineskip
+  \vskip1.05em
+  \begin{beamercolorbox}[wd=\paperwidth,sep=0pt,leftskip=\sausmargin,%
+                         rightskip=\saus@ftright]{frametitle}%
+    \saus@cornercrest
+    \usebeamerfont{frametitle}\insertframetitle\par
+    \ifx\insertframesubtitle\@empty\else
+      \vskip1pt
+      {\usebeamerfont{framesubtitle}\usebeamercolor[fg]{framesubtitle}%
+       \insertframesubtitle\par}%
+    \fi
+    \vskip4pt
+    {\normalsize
+     \color{sausmaroon}\rule[0.8pt]{16pt}{2.2pt}%
+     \color{sausgold}\rule[0.8pt]{7pt}{2.2pt}%
+     \color{sausrule}\rule[1.6pt]{\dimexpr\paperwidth-\sausmargin-\saus@ftright-23pt\relax}{0.6pt}}%
+  \end{beamercolorbox}%
+  \vskip0.55em
+}
+
+%%--------------------------------------------------------------------------
+%% 6. FOOTER AND PROGRESS RULE
+%%--------------------------------------------------------------------------
+\newcommand{\saus@progressline}{%
+  \ifnum\inserttotalframenumber>0\relax
+    \setlength{\saus@pbwd}{\dimexpr\paperwidth/\inserttotalframenumber*\insertframenumber\relax}%
+  \else
+    \setlength{\saus@pbwd}{0pt}%
+  \fi
+  \ifdim\saus@pbwd>\paperwidth\setlength{\saus@pbwd}{\paperwidth}\fi
+  \ifdim\saus@pbwd<0pt\setlength{\saus@pbwd}{0pt}\fi
+  \nointerlineskip
+  \hbox to\paperwidth{%
+    {\color{sausgold}\rule{\saus@pbwd}{1.4pt}}%
+    {\color{sausmaroonlight}\rule{\dimexpr\paperwidth-\saus@pbwd\relax}{1.4pt}}%
+  }%
+}
+
+\newcommand{\saus@framenumber}{%
+  \ifdefstring{\saus@numbering}{none}{}{%
+    \ifdefstring{\saus@numbering}{fraction}%
+      {\insertframenumber\,/\,\inserttotalframenumber}%
+      {\insertframenumber}%
+  }%
+}
+
+\setbeamertemplate{footline}{%
+  \ifsaus@progressbar\saus@progressline\fi
+  \nointerlineskip
+  \begin{beamercolorbox}[wd=\paperwidth,ht=2.3ex,dp=1.3ex,%
+                         leftskip=\sausmargin,rightskip=\sausmargin]{footline}%
+    \usebeamerfont{footline}%
+    {\sauslabelfont\sausls{\MakeUppercase{\saus@shortuniversity}}}%
+    \hfill
+    {\color{sausmist!65!sausmaroon}\insertshorttitle}%
+    \hfill
+    \saus@framenumber
+  \end{beamercolorbox}%
+}
+
+%%--------------------------------------------------------------------------
+%% 7. FULL-BLEED HELPERS (for use inside a tikzpicture[remember picture,overlay])
+%%--------------------------------------------------------------------------
+% Cover-crop an image over the whole page, clipped to the paper edge.
+\newcommand{\sausfullbleed}[1]{%
+  \begin{scope}
+    \clip (current page.south west) rectangle (current page.north east);
+    \node[anchor=center,inner sep=0pt] at (current page.center)
+      {\includegraphics[min width=\paperwidth,min height=\paperheight]{#1}};
+  \end{scope}%
+}
+% Flood the page with a colour at a given opacity.
+\newcommand{\sausfield}[2]{%
+  \fill[#1,opacity=#2] (current page.south west) rectangle (current page.north east);%
+}
+
+% Crest + name + motto lock-up for dark fields.
+\newcommand{\saus@darkwordmark}{%
+  \node[anchor=north west,inner sep=0pt] (saus@crest)
+    at ([shift={(\sausmargin,-0.8cm)}]current page.north west)
+    {\includegraphics[height=1.5cm]{\sauslogowhite}};
+  \node[anchor=west,inner sep=0pt,align=left,xshift=0.45cm] at (saus@crest.east)
+    {{\color{white}\footnotesize\sauslabelfont\sausls{\MakeUppercase{\saus@university}}}\\[3pt]
+     {\color{sausgold}\footnotesize\sausmottofont\saus@motto}%
+     \ifx\saus@nativename\@empty\else\\[2pt]{\color{white}\small\saus@nativename}\fi};
+}
+
+%%--------------------------------------------------------------------------
+%% 8. TITLE PAGE
+%%--------------------------------------------------------------------------
+% "Occasion · date" on one line (either part may be empty)
+\newcommand{\saus@eventdateline}{%
+  \ifx\saus@event\@empty
+    \ifx\insertdate\@empty\else\\[4pt]{\usebeamerfont{date}\color{sausmist}\insertdate}\fi
+  \else
+    \\[4pt]{\usebeamerfont{date}\color{sausmist}\saus@event
+      \ifx\insertdate\@empty\else\saus@sep\insertdate\fi}%
+  \fi}
+
+% Sits on top of the author block (drawn first) and grows upwards, so a
+% two-line title pushes into the open space rather than into the metadata.
+\newcommand{\saus@titleheadline}{%
+  \node[anchor=south west,inner sep=0pt,align=left,text=white,text width=0.78\paperwidth]
+    at ([yshift=0.5cm]saus@meta.north west)
+    {%
+      \usebeamerfont{title}\inserttitle
+      \ifx\insertsubtitle\@empty\else
+        \\[6pt]{\color{sausgold}\rule{2.6cm}{2.2pt}}\\[5pt]
+        {\usebeamerfont{subtitle}\color{sausmist}\insertsubtitle}%
+      \fi
+    };
+}
+
+\newcommand{\saus@titlemeta}{%
+  \node[anchor=south west,inner sep=0pt,align=left,text=white,text width=0.80\paperwidth]
+    (saus@meta) at ([shift={(\sausmargin,1.45cm)}]current page.south west)
+    {%
+      \ifx\saus@department\@empty\else
+        {\color{sausgold}\scriptsize\sauslabelfont
+         \sausls{\MakeUppercase{\saus@department}}}\\[5pt]%
+      \fi
+      {\usebeamerfont{author}\insertauthor}%
+      \saus@eventdateline
+    };
+  \node[anchor=south west,inner sep=0pt] (saus@footrule)
+    at ([shift={(\sausmargin,1.02cm)}]current page.south west)
+    {\color{sausgold}\rule{0.86\paperwidth}{0.8pt}};
+  \node[anchor=south west,inner sep=0pt,text=sausmist]
+    at ([shift={(\sausmargin,0.48cm)}]current page.south west)
+    {\tiny\saus@web};
+  \node[anchor=south east,inner sep=0pt,text=sausmist]
+    at ([shift={(-\sausmargin,0.48cm)}]current page.south east)
+    {\tiny\saus@address\saus@sep\saus@phone};
+}
+
+\defbeamertemplate*{title page}{saus}{%
+\begin{tikzpicture}[remember picture,overlay]
+  \ifdefstring{\saus@titlestyle}{split}{%
+    %% ---- split: light upper field over a deep maroon band ----------------
+    %% Each field holds exactly one centred node, so nothing can collide
+    %% however long the title or the author list turns out to be. The band
+    %% is kept to 36% so a two-line title, subtitle and native-script name
+    %% still fit in the light field on a 16:9 page.
+    \sausfield{sausmist}{1}
+    \fill[sausmaroondark] (current page.south west) rectangle
+      ([shift={(0,0.36\paperheight)}]current page.south east);
+    \fill[sausgold] ([shift={(0,0.36\paperheight)}]current page.south west) rectangle
+      ([shift={(0,0.3675\paperheight)}]current page.south east);
+    \node[anchor=center,inner sep=0pt,align=center,text width=0.86\paperwidth]
+      at ([shift={(0,0.69\paperheight)}]current page.south)
+      {\saus@nohyphen
+       \includegraphics[height=1.15cm]{\sauslogo}\\[6pt]
+       {\color{sausmaroon}\scriptsize\sauslabelfont
+        \sausls{\MakeUppercase{\saus@university}}}\\[2pt]
+       {\color{sausslate}\scriptsize\sausmottofont\saus@motto}%
+       \ifx\saus@nativename\@empty\else\\[0pt]{\color{sausmaroon}\small\saus@nativename}\fi
+       \\[8pt]
+       {\color{sausmaroon}\usebeamerfont{title}\inserttitle}%
+       \ifx\insertsubtitle\@empty\else\\[5pt]
+         {\usebeamerfont{subtitle}\color{sausslate}\insertsubtitle}%
+       \fi};
+    \node[anchor=center,inner sep=0pt,align=center,text width=0.86\paperwidth,text=white]
+      at ([shift={(0,0.18\paperheight)}]current page.south)
+      {%
+        \ifx\saus@department\@empty\else
+          {\color{sausgold}\scriptsize\sauslabelfont
+           \sausls{\MakeUppercase{\saus@department}}}\\[7pt]%
+        \fi
+        {\usebeamerfont{author}\insertauthor}%
+        \saus@eventdateline
+        \\[11pt]{\color{sausmist}\tiny\saus@web\saus@sep\saus@address%
+        \saus@sep\saus@phone}};
+  }{%
+    \ifdefstring{\saus@titlestyle}{solid}{%
+      %% ---- solid: deep maroon field with a ghosted crest ----------------
+      \sausfield{sausmaroondark}{1}
+      \node[anchor=east,inner sep=0pt,opacity=0.10]
+        at ([shift={(1.1cm,0)}]current page.east)
+        {\includegraphics[height=1.18\paperheight]{\sauslogowhite}};
+      \fill[sausmaroon,opacity=0.40,path fading=east]
+        (current page.south west) rectangle (current page.north east);
+    }{%
+      %% ---- photo (default): campus photograph under a maroon wash -------
+      \sausfullbleed{\saus@assets\saus@titleimage}
+      \sausfield{sausmaroondark}{0.84}
+      \fill[sausmaroondark,opacity=0.55,path fading=east]
+        (current page.south west) rectangle (current page.north east);
+    }%
+    \saus@darkwordmark
+    \saus@titlemeta
+    \saus@titleheadline
+  }%
+\end{tikzpicture}%
+}
+\setbeamertemplate{title page}[saus]
+
+%%--------------------------------------------------------------------------
+%% 9. SECTION PAGE
+%%--------------------------------------------------------------------------
+\defbeamertemplate*{section page}{saus}{%
+\begin{tikzpicture}[remember picture,overlay]
+  \sausfield{sausmaroondark}{1}
+  \node[anchor=east,inner sep=0pt,opacity=0.09]
+    at ([shift={(1.3cm,0)}]current page.east)
+    {\includegraphics[height=1.22\paperheight]{\sauslogowhite}};
+  \node[anchor=west,inner sep=0pt,text=sausgold]
+    at ([shift={(\sausmargin,1.4cm)}]current page.west)
+    {\scriptsize\sauslabelfont\sausls{\MakeUppercase{Section \insertsectionnumber}}};
+  \node[anchor=west,inner sep=0pt,align=left,text=white,text width=0.70\paperwidth]
+    at ([shift={(\sausmargin,0.3cm)}]current page.west)
+    {\usebeamerfont{title}\insertsectionhead};
+  \node[anchor=west,inner sep=0pt]
+    at ([shift={(\sausmargin,-1.0cm)}]current page.west)
+    {\color{sausgold}\rule{2.6cm}{2.2pt}};
+\end{tikzpicture}%
+}
+\setbeamertemplate{section page}[saus]
+
+\ifsaus@sectionpages
+  \AtBeginSection[]{%
+    \begin{frame}[plain,noframenumbering]
+      \sectionpage
+    \end{frame}%
+  }
+\fi
+
+%%--------------------------------------------------------------------------
+%% 10. BLOCKS
+%%--------------------------------------------------------------------------
+\setbeamertemplate{block begin}{%
+  \par\vskip\medskipamount
+  \begin{beamercolorbox}[colsep*=0pt,vmode,leftskip=0.7em,rightskip=0.7em]{block title}%
+    \vskip3pt\usebeamerfont{block title}\insertblocktitle\par\vskip3pt
+  \end{beamercolorbox}%
+  \nointerlineskip
+  \usebeamerfont{block body}%
+  \begin{beamercolorbox}[colsep*=0pt,vmode,leftskip=0.7em,rightskip=0.7em]{block body}%
+  \vskip0.7em\saus@blockalign
+}
+\setbeamertemplate{block end}{\vskip0.6em\end{beamercolorbox}\vskip\smallskipamount}
+
+\setbeamertemplate{block alerted begin}{%
+  \par\vskip\medskipamount
+  \begin{beamercolorbox}[colsep*=0pt,vmode,leftskip=0.7em,rightskip=0.7em]{block title alerted}%
+    \vskip3pt\usebeamerfont{block title}\insertblocktitle\par\vskip3pt
+  \end{beamercolorbox}%
+  \nointerlineskip
+  \usebeamerfont{block body}%
+  \begin{beamercolorbox}[colsep*=0pt,vmode,leftskip=0.7em,rightskip=0.7em]{block body alerted}%
+  \vskip0.7em\saus@blockalign
+}
+\setbeamertemplate{block alerted end}{\vskip0.6em\end{beamercolorbox}\vskip\smallskipamount}
+
+\setbeamertemplate{block example begin}{%
+  \par\vskip\medskipamount
+  \begin{beamercolorbox}[colsep*=0pt,vmode,leftskip=0.7em,rightskip=0.7em]{block title example}%
+    \vskip3pt\usebeamerfont{block title}\insertblocktitle\par\vskip3pt
+  \end{beamercolorbox}%
+  \nointerlineskip
+  \usebeamerfont{block body}%
+  \begin{beamercolorbox}[colsep*=0pt,vmode,leftskip=0.7em,rightskip=0.7em]{block body example}%
+  \vskip0.7em\saus@blockalign
+}
+\setbeamertemplate{block example end}{\vskip0.6em\end{beamercolorbox}\vskip\smallskipamount}
+
+%%--------------------------------------------------------------------------
+%% 11. LISTS, TABLE OF CONTENTS, CAPTIONS
+%%--------------------------------------------------------------------------
+\setbeamertemplate{itemize item}{%
+  \usebeamercolor[fg]{itemize item}\rule[0.18ex]{0.8ex}{0.8ex}}
+\setbeamertemplate{itemize subitem}{%
+  \usebeamercolor[fg]{itemize subitem}\rule[0.22ex]{0.6ex}{0.6ex}}
+\setbeamertemplate{itemize subsubitem}{%
+  \usebeamercolor[fg]{itemize subsubitem}\rule[0.26ex]{0.45ex}{0.45ex}}
+
+\setbeamertemplate{enumerate item}{%
+  \tikz[baseline=(sausnum.base)]{%
+    \node[fill=sausmaroon,text=white,inner xsep=0.32em,inner ysep=0.16em,
+          rounded corners=0.10em,font=\footnotesize\sausdisplayfamily\sausdisplayseries](sausnum)
+      {\insertenumlabel};}}
+\setbeamertemplate{enumerate subitem}{%
+  {\color{sausblue}\bfseries\insertsubenumlabel.}}
+
+\setbeamertemplate{description item}{%
+  {\usebeamercolor[fg]{description item}\bfseries\insertdescriptionitem}}
+
+\setbeamertemplate{section in toc}{%
+  \leavevmode
+  {\color{sausgold}\rule[0.18ex]{0.8ex}{0.8ex}}\hspace{0.7em}%
+  {\color{sausmaroon}\sausdisplayfamily\sausdisplayseries\inserttocsectionnumber.}\hspace{0.35em}%
+  \inserttocsection\par}
+\setbeamertemplate{subsection in toc}{%
+  \leavevmode\hspace{2.25em}{\color{sausrule}\rule[0.18ex]{0.55ex}{0.55ex}}\hspace{0.6em}%
+  \inserttocsubsection\par}
+
+\setbeamertemplate{caption}[numbered]
+\setbeamertemplate{caption label separator}{\,\textbar\,}
+\setbeamertemplate{bibliography item}[text]
+
+%%--------------------------------------------------------------------------
+%% 12. PRESENTATION FURNITURE
+%%     All of these are slide *contents* -- put them in \begin{frame}[plain].
+%%--------------------------------------------------------------------------
+% Full-bleed maroon statement slide.
+\newcommand{\sausstatement}[1]{%
+\begin{tikzpicture}[remember picture,overlay]
+  \sausfield{sausmaroondark}{1}
+  \node[anchor=center,inner sep=0pt,opacity=0.07]
+    at ([shift={(0.38\paperwidth,0)}]current page.center)
+    {\includegraphics[height=1.15\paperheight]{\sauslogowhite}};
+  \node[anchor=center,align=center,text=white,text width=0.80\paperwidth,inner sep=0pt]
+    at (current page.center) {\usebeamerfont{title}#1};
+\end{tikzpicture}%
+}
+
+% Pull quote.  #1 = quotation, #2 = attribution
+\newcommand{\sausquote}[2]{%
+\begin{tikzpicture}[remember picture,overlay]
+  \sausfield{sausmist}{1}
+  \node[anchor=north west,inner sep=0pt,text=sausmaroon,opacity=0.18]
+    at ([shift={(\sausmargin,-0.7cm)}]current page.north west)
+    {\sausmottofont\fontsize{110}{110}\selectfont\textquotedblleft};
+  \node[anchor=center,align=left,text=sausmaroondark,text width=0.78\paperwidth,inner sep=0pt]
+    at (current page.center) {\saus@nohyphen\sausmottofont\fontsize{24}{30}\selectfont #1};
+  \node[anchor=south west,align=left,text=sausslate,inner sep=0pt]
+    at ([shift={(\sausmargin,1.5cm)}]current page.south west)
+    {{\color{sausgold}\rule{1.6cm}{2pt}}\\[7pt]{\color{sausslate}\small\bfseries #2}};
+\end{tikzpicture}%
+}
+
+% Full-bleed photograph with a caption band.  #1 = file, #2 = caption
+\newcommand{\sausphotoslide}[2]{%
+\begin{tikzpicture}[remember picture,overlay]
+  \sausfullbleed{#1}
+  \fill[sausmaroondark,opacity=0.82] (current page.south west) rectangle
+    ([shift={(0,1.5cm)}]current page.south east);
+  \node[anchor=west,inner sep=0pt,text=white,align=left,text width=0.84\paperwidth]
+    at ([shift={(\sausmargin,0.75cm)}]current page.south west) {\small #2};
+\end{tikzpicture}%
+}
+
+% Closing slide.  Optional argument replaces the headline.
+\newcommand{\sausthankyou}[1][Thank you]{%
+\begin{tikzpicture}[remember picture,overlay]
+  \sausfield{sausmaroondark}{1}
+  \node[anchor=north,inner sep=0pt]
+    at ([shift={(0,-0.85cm)}]current page.north)
+    {\includegraphics[height=1.9cm]{\sauslogowhite}};
+  \node[anchor=north,inner sep=0pt,align=center,text=white,text width=0.86\paperwidth]
+    at ([shift={(0,-3.1cm)}]current page.north)
+    {{\usebeamerfont{title}#1}\\[10pt]
+     {\color{sausgold}\rule{2.6cm}{2.2pt}}\\[10pt]
+     {\color{white}\footnotesize\sauslabelfont\sausls{\MakeUppercase{\saus@university}}}\\[5pt]
+     {\color{sausgold}\footnotesize\sausmottofont\saus@motto}%
+     \ifx\saus@nativename\@empty\else\\[4pt]{\color{white}\normalsize\saus@nativename}\fi};
+  \node[anchor=south,inner sep=0pt,align=center,text=sausmist]
+    at ([shift={(0,0.8cm)}]current page.south)
+    {\scriptsize\saus@web\saus@sep\saus@address\saus@sep\saus@phone};
+\end{tikzpicture}%
+}
+
+\endinput

@@ -1,0 +1,300 @@
+%%==========================================================================
+%%  saus-thesis-demo.tex
+%%  A sample final year project report showing every part of the thesis
+%%  class: cover, title page, approval, declaration, abstracts, lists,
+%%  chapters, figures, tables, equations, theorems, code and references.
+%%  The students and supervisor are placeholders.
+%%  Compile with:  latexmk saus-thesis-demo.tex   (LuaLaTeX and Biber)
+%%==========================================================================
+% degree  = bs (default) | ms | mphil | phd
+% type    = project | thesis          (default: project for bs, thesis otherwise)
+% body    = serif (default) | sans
+% spacing = onehalf (default) | single | double
+% bib     = ieee (default) | apa | numeric | authoryear | none
+% twoside   print on both sides; chapters open on right-hand pages
+% print     black links, for the bound copy
+% status  = final (default) | draft   marks every page "Draft" with the date
+\documentclass[degree=bs,bib=ieee]{saus-thesis}
+
+\addbibresource{saus-thesis-demo.bib}
+
+%% ---- Details ---------------------------------------------------------------
+\title{A Shared Document Identity for The Shaikh Ayaz University}
+\subtitle{Templates for slides, posters, letters, certificates and theses}
+\student{Student One}{Roll No. 00-CS-001}
+\student{Student Two}{Roll No. 00-CS-002}
+\student{Student Three}{Roll No. 00-CS-003}
+\supervisor{Dr. A. Supervisor}{Assistant Professor, Department of Computer Science}
+\discipline{Computer Science}
+\sausdepartment{Department of Computer Science}
+% \faculty{Faculty of ...}
+\session{2022--2026}
+% \submissiondate{September 2026}     % defaults to the current month
+\similarity{9\%}                      % leave out if not required
+\keywords{document design, typography, \LaTeX, accessibility, Sindhi, Urdu}
+
+% Signatures on the certificate of approval, after the supervisor
+\approvedby{External Examiner}{Name, designation and institution}
+\approvedby{Head of Department}{Department of Computer Science}
+
+\begin{document}
+
+\makecover            % full-page cover for the PDF copy (leave out when printing)
+\frontmatter
+\maketitlepage
+\makeapproval
+\makedeclaration
+\dedication{To the teachers of Shikarpur.}
+
+\begin{acknowledgements}
+We thank our supervisor for guidance throughout this project, the IT Directorate
+for access to the university's crest and photographs, and our classmates who
+tested the templates in their own coursework.
+\end{acknowledgements}
+
+\begin{abstract}
+Documents produced across a university---lecture slides, research posters,
+official letters, certificates and theses---are often designed separately, and
+so present the institution inconsistently. This project builds a single
+document identity for The Shaikh Ayaz University, Shikarpur: a shared brand
+layer that holds the colours sampled from the university crest, the typefaces
+and the institutional details, and a family of \LaTeX{} templates that draw on
+it. The templates set the university's name in English, Sindhi and Urdu, meet
+the WCAG~2.1 contrast requirements for text, and compile with LuaLaTeX,
+XeLaTeX and pdfLaTeX. Matching PowerPoint, Word and Excel templates extend the
+same identity to colleagues who do not use \LaTeX{}.
+\end{abstract}
+
+\begin{urduabstract}
+یہ منصوبہ شیخ ایاز یونیورسٹی، شکارپور کے لیے دستاویزات کے مشترکہ سانچوں کا ایک
+مجموعہ پیش کرتا ہے۔ ان سانچوں میں سلائیڈز، پوسٹر، سرکاری خطوط، اسناد اور مقالے
+شامل ہیں، جو یونیورسٹی کے نشان، رنگوں اور حروف کو یکساں انداز میں استعمال کرتے ہیں۔
+یونیورسٹی کا نام انگریزی، سندھی اور اردو تینوں زبانوں میں درج کیا جاتا ہے۔
+\end{urduabstract}
+
+\tableofcontents
+\listoffigures
+\listoftables
+\lstlistoflistings
+
+\begin{abbreviations}
+  \abbr{FYP}{Final Year Project}
+  \abbr{HEC}{Higher Education Commission}
+  \abbr{PDF}{Portable Document Format}
+  \abbr{RTL}{Right to left}
+  \abbr{SAUS}{The Shaikh Ayaz University, Shikarpur}
+  \abbr{WCAG}{Web Content Accessibility Guidelines}
+\end{abbreviations}
+
+\mainmatter
+
+%% ---------------------------------------------------------------------------
+\chapter{Introduction}\label{ch:intro}
+
+A university speaks through its documents. A student meets it first in an
+admission letter, a colleague elsewhere in a conference poster, and an employer
+in a degree certificate. When each of these is designed separately, the
+institution appears as several different organisations.
+
+\section{Problem statement}
+
+The Shaikh Ayaz University, Shikarpur, a public sector general university with
+two faculties and seven degree programmes, had no shared templates for its
+documents. Departments prepared slides, posters and letters independently, with
+differing colours, typefaces and renderings of the university's name.
+
+\section{Objectives}
+
+The project set out to:
+\begin{enumerate}
+  \item derive a colour palette and typographic system from the university crest;
+  \item build templates for slides, posters, letters, certificates and theses
+        that share this system by construction, not by copying;
+  \item set the university's name correctly in Sindhi and Urdu as well as English;
+  \item keep every text colour legible under WCAG~2.1~\cite{wcag21}.
+\end{enumerate}
+
+\section{Scope}
+
+The templates target \LaTeX{}~\cite{lamport1994}, the standard for technical
+writing in the sciences, with matching Office templates for colleagues who
+work in PowerPoint, Word and Excel. Chapter~\ref{ch:design} describes the
+design, Chapter~\ref{ch:implementation} its implementation and
+Chapter~\ref{ch:evaluation} the evaluation.
+
+%% ---------------------------------------------------------------------------
+\chapter{Background}\label{ch:background}
+
+\section{Typography and identity}
+
+Bringhurst describes typography as the craft of endowing language with a
+durable visual form~\cite{bringhurst2012}. For an institution, that form is
+part of its identity: the same typefaces, used the same way, make documents
+recognisably its own.
+
+\section{\TeX{} and \LaTeX{}}
+
+\TeX{}~\cite{knuth1984} separates the content of a document from its design.
+\LaTeX{} classes and packages carry the design, so a single change to a class
+restyles every document built on it. KOMA-Script~\cite{kohm-koma} provides the
+foundations for the letter and thesis classes, TikZ~\cite{tantau-tikz} draws the
+title pages, and \texttt{fontspec}~\cite{robertson-fontspec} loads the typefaces.
+
+\section{Arabic-script names}
+
+Sindhi and Urdu are written right to left in the Arabic script, Sindhi usually
+in Naskh and Urdu in Nastaliq. The templates set Sindhi in Lateef~\cite{sil-lateef}
+and Urdu in Noto Nastaliq Urdu, both of which are bundled with the templates.
+
+%% ---------------------------------------------------------------------------
+\chapter{Design}\label{ch:design}
+
+\section{The crest}
+
+The university crest (Figure~\ref{fig:crest}) supplies the two primary colours:
+the maroon of its script and border, and the royal blue of its outer ring.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[height=45mm]{\sauslogo}
+  \caption{The university crest, the source of the primary colours.}
+  \label{fig:crest}
+\end{figure}
+
+\section{Colour and legibility}
+
+\begin{definition}[Contrast ratio]\label{def:contrast}
+For two colours with relative luminances $L_1 \ge L_2$, the contrast ratio is
+\begin{equation}\label{eq:contrast}
+  C = \frac{L_1 + 0.05}{L_2 + 0.05},
+\end{equation}
+which runs from $1$ (no contrast) to $21$ (black on white)~\cite{wcag21}.
+\end{definition}
+
+WCAG~2.1 asks for $C \ge 4.5$ for body text and $C \ge 3$ for large text.
+Table~\ref{tab:palette} lists the palette with each colour's contrast
+against white, computed with Equation~\eqref{eq:contrast}.
+
+\begin{table}[htbp]
+  \centering
+  \caption{The brand palette and its contrast against white.}
+  \label{tab:palette}
+  \begin{tabular}{@{}llrl@{}}
+    \toprule
+    \textbf{Colour} & \textbf{Hex} & \textbf{Contrast} & \textbf{Use} \\
+    \midrule
+    Maroon      & \texttt{\#6B2A4C} & 10.2:1 & Primary \\
+    Deep maroon & \texttt{\#4A1C34} & 13.9:1 & Large fields \\
+    Royal blue  & \texttt{\#1A1A91} & 13.1:1 & Secondary \\
+    Gold        & \texttt{\#C39B3E} &  2.6:1 & Rules and accents only \\
+    Ink         & \texttt{\#231C21} & 16.7:1 & Body text \\
+    Slate       & \texttt{\#6A626B} &  5.9:1 & Secondary text \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+Gold falls below the threshold on white, so the templates use it only for rules
+and ornaments, or for small capitals on the deep maroon field.
+
+%% ---------------------------------------------------------------------------
+\chapter{Implementation}\label{ch:implementation}
+
+\section{A shared brand layer}
+
+Every template loads one package, \texttt{saus-brand.sty}, which defines the
+colours, typefaces and identity (Figure~\ref{fig:architecture}). A change to
+that file reaches every template.
+
+\begin{figure}[htbp]
+  \centering
+  \begin{tikzpicture}[
+      box/.style={draw=sausmaroon,fill=sausmist,rounded corners=2pt,
+        minimum width=24mm,minimum height=9mm,font=\sffamily\small},
+      brand/.style={box,fill=sausmaroon,text=white,minimum width=40mm},
+      >=stealth]
+    \node[brand] (brand) {saus-brand.sty};
+    \foreach \name/\x in {Slides/-54mm,Posters/-27mm,Letters/0mm,Certificates/27mm,Theses/54mm}
+      \node[box] (\name) at (\x,-22mm) {\name};
+    \foreach \name in {Slides,Posters,Letters,Certificates,Theses}
+      \draw[->,sausmaroonlight,thick] (brand.south) -- (\name.north);
+  \end{tikzpicture}
+  \caption{Every template draws on the shared brand layer.}
+  \label{fig:architecture}
+\end{figure}
+
+\section{Using a template}
+
+A presentation needs only the theme; the university's details are already
+built in. Listing~\ref{lst:slides} shows a complete title slide.
+
+\begin{lstlisting}[language={[LaTeX]TeX},caption={A title slide with the SAUS theme.},label={lst:slides}]
+\documentclass[aspectratio=169]{beamer}
+\usetheme{SAUS}                  % colours, fonts and crest
+\title{Digital Transformation of Campus Services}
+\author{Dr. A. Presenter}
+\begin{document}
+\begin{frame}[plain]\titlepage\end{frame}
+\end{document}
+\end{lstlisting}
+
+\section{Engines}
+
+\begin{proposition}\label{prop:engines}
+Each template compiles without errors under LuaLaTeX, XeLaTeX and pdfLaTeX.
+\end{proposition}
+
+LuaLaTeX and XeLaTeX use the OpenType typefaces directly and set Sindhi and
+Urdu; pdfLaTeX falls back to Type~1 versions of the typefaces and omits the
+Arabic-script names, as Chapter~\ref{ch:evaluation} confirms.
+
+%% ---------------------------------------------------------------------------
+\chapter{Evaluation}\label{ch:evaluation}
+
+\section{Compilation}
+
+Each template's demonstration file was compiled with all three engines.
+Table~\ref{tab:engines} summarises the result.
+
+\begin{table}[htbp]
+  \centering
+  \caption{Compilation of the demonstration files.}
+  \label{tab:engines}
+  \begin{tabular}{@{}lccc@{}}
+    \toprule
+    \textbf{Template} & \textbf{LuaLaTeX} & \textbf{XeLaTeX} & \textbf{pdfLaTeX} \\
+    \midrule
+    Slides       & Yes & Yes & Yes\textsuperscript{a} \\
+    Posters      & Yes & Yes & Yes\textsuperscript{a} \\
+    Letters      & Yes & Yes & Yes\textsuperscript{a} \\
+    Certificates & Yes & Yes & Yes\textsuperscript{a} \\
+    \bottomrule
+    \multicolumn{4}{@{}l}{\footnotesize\textsuperscript{a}\,Without the Sindhi and Urdu names.}
+  \end{tabular}
+\end{table}
+
+\section{Legibility}
+
+Every colour used for text reaches a contrast of at least $4.5$ against white
+(Table~\ref{tab:palette}), satisfying Definition~\ref{def:contrast} at the
+level WCAG~2.1 requires for body text.
+
+%% ---------------------------------------------------------------------------
+\chapter{Conclusion}\label{ch:conclusion}
+
+The project produced a shared document identity for the university and a
+family of templates that apply it consistently. Because the design lives in one
+brand layer, future changes---a new typeface, a revised address---need to be
+made only once. Future work could extend the templates to the university's
+website and to forms.
+
+\printreferences
+
+\appendix
+\chapter{Using the templates}\label{app:using}
+
+The templates, with starter files and full documentation, are in the
+\texttt{latex} folder. Copy the template and its starter file, with
+\texttt{saus-brand.sty} and the \texttt{assets} folder, into a new directory
+and build with \texttt{latexmk}.
+
+\end{document}

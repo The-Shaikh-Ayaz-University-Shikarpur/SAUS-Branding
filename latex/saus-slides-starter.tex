@@ -1,0 +1,47 @@
+%%==========================================================================
+%%  saus-slides-starter.tex
+%%  Copy this file next to the "assets" folder (with beamerthemeSAUS.sty,
+%%  saus-brand.sty and .latexmkrc), then:  latexmk saus-slides-starter.tex
+%%==========================================================================
+\documentclass[aspectratio=169,11pt]{beamer}
+
+\usetheme{SAUS}
+
+%% Optional -- shown on the title slide
+\sausdepartment{Department of ...}
+\sausevent{Occasion or venue}
+
+% The short form in [brackets] appears in the footer
+\title[Short title]{Your presentation title}
+\subtitle{An optional subtitle}
+\author{Your Name}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}[plain,noframenumbering]
+  \titlepage
+\end{frame}
+
+\begin{frame}{Outline}
+  \tableofcontents
+\end{frame}
+
+\section{First section}
+
+\begin{frame}{A slide title}{An optional subtitle}
+  \begin{itemize}
+    \item First point
+    \item Second point
+  \end{itemize}
+
+  \begin{block}{A block}
+    Something worth boxing off.
+  \end{block}
+\end{frame}
+
+\begin{frame}[plain,noframenumbering]
+  \sausthankyou
+\end{frame}
+
+\end{document}

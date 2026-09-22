@@ -1,0 +1,92 @@
+%%==========================================================================
+%%  saus-thesis-starter.tex
+%%  Copy this file next to the "assets" folder (with saus-thesis.cls,
+%%  saus-brand.sty and .latexmkrc), then:
+%%    latexmk saus-thesis-starter.tex
+%%
+%%  Options:  degree=bs|ms|mphil|phd        wording of the degree
+%%            type=project|thesis           "project report" or "thesis"
+%%            body=serif|sans               EB Garamond or Fira Sans text
+%%            spacing=onehalf|single|double line spacing
+%%            bib=ieee|apa|numeric|authoryear|none
+%%            twoside                       chapters open on right-hand pages
+%%            print                         black links for the bound copy
+%%            status=draft                  marks pages "Draft" with the date
+%%==========================================================================
+\documentclass[degree=bs,bib=ieee]{saus-thesis}
+
+\addbibresource{saus-thesis-demo.bib}          % replace with your own .bib file
+
+%% ---- Details ---------------------------------------------------------------
+\title{Title of the Project}
+% \subtitle{Optional subtitle}
+\student{Student Name}{Roll No. ...}          % one line per group member
+% \student{Second Student}{Roll No. ...}
+\supervisor{Supervisor Name}{Designation, Department of ...}
+% \cosupervisor{Co-supervisor Name}{Designation, Department of ...}
+\discipline{Computer Science}                 % "Bachelor of Science in ..."
+\sausdepartment{Department of ...}
+% \faculty{Faculty of ...}
+\session{2022--2026}
+% \submissiondate{September 2026}             % defaults to the current month
+% \similarity{..\%}                           % plagiarism report, if required
+\keywords{keyword one, keyword two}
+
+% Signatures on the certificate of approval, after the supervisor(s)
+\approvedby{External Examiner}{Name and designation}
+\approvedby{Head of Department}{Department of ...}
+
+\begin{document}
+
+% \makecover                                   % colour cover for the PDF copy
+\frontmatter
+\maketitlepage
+\makeapproval
+\makedeclaration
+% \dedication{To ...}
+
+\begin{acknowledgements}
+...
+\end{acknowledgements}
+
+\begin{abstract}
+A summary of the problem, the method, the results and the conclusions,
+in one page.
+\end{abstract}
+
+% \begin{urduabstract} ... \end{urduabstract}   % if required (LuaLaTeX)
+% \begin{sindhiabstract} ... \end{sindhiabstract}
+
+\tableofcontents
+\listoffigures
+\listoftables
+
+\begin{abbreviations}
+  \abbr{HEC}{Higher Education Commission}
+\end{abbreviations}
+
+\mainmatter
+% Longer reports: put each chapter in its own file and \include{chapters/intro}
+\chapter{Introduction}
+\section{Background}
+Cite sources with \verb|\cite{key}|, for example~\cite{lamport1994}.
+\section{Problem statement}
+\section{Objectives}
+\section{Scope}
+
+\chapter{Literature Review}
+
+\chapter{Methodology}
+
+\chapter{Implementation}
+
+\chapter{Results and Discussion}
+
+\chapter{Conclusion and Future Work}
+
+\printreferences
+
+\appendix
+\chapter{Additional Material}
+
+\end{document}

@@ -1,0 +1,93 @@
+%%==========================================================================
+%%  saus-letter-demo.tex
+%%  A two-page letter from the Department of Computer Science showing the
+%%  letterhead, reference line, subject, lists, a table, signature,
+%%  enclosure, copy list and continuation page.
+%%  Compile with:  latexmk saus-letter-demo.tex   (LuaLaTeX via .latexmkrc)
+%%==========================================================================
+% native    = both (default) | sindhi | urdu | none
+% mono      = greyscale, for black-and-white printers
+% foldmarks = DIN fold and punch marks
+% sign      = 1 adds the signature image, 0 leaves the space for a pen
+% closing   = left (default) | right  -- side for closing, signature and name
+\documentclass[sign=1,closing=left]{saus-letter}
+
+\usepackage{booktabs}
+
+%% ---- Sender ---------------------------------------------------------------
+\sausdepartment{Department of Computer Science}   % office name under the motto
+\sausemail{hod.cs@saus.edu.pk}                    % shown in the footer
+% \sausphone{...}                                 % a direct line replaces the main number
+\setkomavar{fromname}{Head of Department}
+\setkomavar{signature}{Head of Department\\ Department of Computer Science}
+% Signature image. This demo uses a drawn specimen -- a real signature belongs
+% in the signer's own copy of a letter, never in a shared template.
+% The default is signature-trans.png next to this file; [height] is optional.
+\saussignimage{assets/signature-specimen.png}
+
+%% ---- This letter ----------------------------------------------------------
+\setkomavar{myref}{SAUS/CS/2026/01}               % "Ref. No." -- same line as the date; {0} hides it
+\setkomavar{subject}{University templates for lectures, posters and letters}
+
+\begin{document}
+\begin{letter}{%
+  All Faculty Members\\
+  Department of Computer Science\\
+  The Shaikh Ayaz University, Shikarpur}
+
+\opening{Dear Colleagues,}
+
+The university's IT Directorate has prepared a set of document templates that
+give our presentations, research posters and correspondence one consistent
+identity. They are built on the university crest, use the same colours and
+typefaces throughout, and set the university's name in English, Sindhi and
+Urdu. I would like the department to adopt them for its teaching, research and
+official work.
+
+The templates are written in \LaTeX{}, which many of you already use for
+research papers and theses:
+
+\begin{itemize}
+  \item \textbf{Slides} --- a presentation theme for lectures and seminars, with
+        mathematics set in a typeface matched to the text.
+  \item \textbf{Posters} --- research posters from A3 to A0, in portrait or
+        landscape, for conferences and the department's research events.
+  \item \textbf{Letters} --- this letterhead, for the department's official
+        correspondence and notifications.
+\end{itemize}
+
+All three share one brand file, so the university's colours, address and
+typefaces stay the same across every document the department produces.
+
+\begin{center}
+\begin{tabular}{@{}lll@{}}
+  \toprule
+  \textbf{Template} & \textbf{Start from} & \textbf{Main file} \\
+  \midrule
+  Slides  & \texttt{saus-slides-starter.tex} & \texttt{beamerthemeSAUS.sty} \\
+  Posters & \texttt{saus-poster-starter.tex} & \texttt{saus-poster.cls} \\
+  Letters & \texttt{saus-letter-starter.tex} & \texttt{saus-letter.cls} \\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+The templates run on any standard \LaTeX{} installation, including Overleaf,
+and need no fonts to be installed on individual computers. Colleagues who have
+not used \LaTeX{} before can start from the starter files, which contain every
+field they need to fill in.
+
+Please use the slide template for lectures and seminars from the coming
+semester, and the poster template for any research you present on behalf of the
+department. Course coordinators are requested to share this letter with the
+visiting faculty and teaching assistants in their courses.
+
+The IT Directorate is glad to help anyone setting up the templates. Questions
+about their use in the department may be sent to me at the address below.
+
+\closing{Yours sincerely,}
+
+\encl{Template guide (README)}
+\cc{IT Directorate\\ Office file}
+
+\end{letter}
+\end{document}

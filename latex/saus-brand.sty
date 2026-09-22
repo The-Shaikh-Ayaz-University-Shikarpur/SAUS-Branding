@@ -1,0 +1,305 @@
+%%==========================================================================
+%%  saus-brand.sty
+%%  Shared brand layer for THE SHAIKH AYAZ UNIVERSITY, SHIKARPUR
+%%  "Revival of Educational Glory of Shikarpur"
+%%
+%%  Colours, institutional details, typography, Sindhi/Urdu support and
+%%  small helpers. Loaded by the Beamer theme (beamerthemeSAUS.sty) and the
+%%  poster class (saus-poster.cls), so both stay identical by construction.
+%%  It can also be loaded on its own in any LaTeX document.
+%%
+%%  Version 1.3 -- 2026-09-21
+%%==========================================================================
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{saus-brand}[2026/09/21 v1.3 Shaikh Ayaz University Shikarpur brand]
+
+\RequirePackage{etoolbox}
+\RequirePackage{kvoptions}
+\RequirePackage{iftex}
+\RequirePackage{xcolor}
+\RequirePackage{graphicx}
+
+%%--------------------------------------------------------------------------
+%% 1. OPTIONS
+%%--------------------------------------------------------------------------
+% Options use their own prefix and are then copied to the shared \saus@...
+% names, so the theme and poster class can declare the same options too.
+\SetupKeyvalOptions{family=sausbrand,prefix=sausbrand@}
+% path (with trailing slash) where the branding assets live
+\DeclareStringOption[assets/]{assets}
+% use the brand typefaces (false leaves fonts to the document)
+\DeclareBoolOption[true]{fonts}
+% native = sindhi | urdu | both | none  (native-script university name)
+\DeclareStringOption[sindhi]{native}
+% math = fira | garamond  (Garamond-Math for text set in EB Garamond)
+\DeclareStringOption[fira]{math}
+\ProcessKeyvalOptions*
+
+\let\saus@assets\sausbrand@assets
+\let\saus@native\sausbrand@native
+\@ifundefined{ifsaus@fonts}{\newif\ifsaus@fonts}{}
+\ifsausbrand@fonts\saus@fontstrue\else\saus@fontsfalse\fi
+
+%%--------------------------------------------------------------------------
+%% 2. BRAND COLOURS
+%%    Maroon and royal blue are sampled directly from the university crest;
+%%    gold, mist and the neutrals are the supporting family built around them.
+%%--------------------------------------------------------------------------
+\definecolor{sausmaroon}{HTML}{6B2A4C}      % primary   - crest script & border
+\definecolor{sausmaroondark}{HTML}{4A1C34}  % primary   - deep, for large fields
+\definecolor{sausmaroonlight}{HTML}{8E4166} % primary   - tints and hovers
+\definecolor{sausblue}{HTML}{1A1A91}        % secondary - crest ring band
+\definecolor{sausbluedark}{HTML}{131368}    % secondary - deep, for text
+\definecolor{sausgold}{HTML}{C39B3E}        % accent    - rules, highlights
+\definecolor{sausmist}{HTML}{F4EDF1}        % surface   - crest field tint
+\definecolor{sausink}{HTML}{231C21}         % body text
+\definecolor{sausslate}{HTML}{6A626B}       % muted text
+\definecolor{sausrule}{HTML}{D9C9D2}        % hairlines
+\definecolor{sausgreen}{HTML}{2E6B4F}       % semantic  - positive
+\definecolor{sausred}{HTML}{B3261E}         % semantic  - alert
+
+\colorlet{SAUSprimary}{sausmaroon}
+\colorlet{SAUSsecondary}{sausblue}
+\colorlet{SAUSaccent}{sausgold}
+
+%%--------------------------------------------------------------------------
+%% 3. INSTITUTIONAL DATA (override any of these in your own preamble)
+%%--------------------------------------------------------------------------
+\newcommand{\saus@university}{The Shaikh Ayaz University, Shikarpur}
+\newcommand{\saus@shortuniversity}{The Shaikh Ayaz University, Shikarpur}
+\newcommand{\saus@motto}{Revival of Educational Glory of Shikarpur}
+\newcommand{\saus@web}{saus.edu.pk}
+\newcommand{\saus@address}{Main Road, Shikarpur, Sindh}
+\newcommand{\saus@phone}{+92 726 512039}
+\newcommand{\saus@department}{}
+\newcommand{\saus@event}{}
+
+\newcommand{\sausuniversity}[1]{\renewcommand{\saus@university}{#1}}
+\newcommand{\sausshortuniversity}[1]{\renewcommand{\saus@shortuniversity}{#1}}
+\newcommand{\sausmotto}[1]{\renewcommand{\saus@motto}{#1}}
+\newcommand{\sausweb}[1]{\renewcommand{\saus@web}{#1}}
+\newcommand{\sausaddress}[1]{\renewcommand{\saus@address}{#1}}
+\newcommand{\sausphone}[1]{\renewcommand{\saus@phone}{#1}}
+\newcommand{\sausdepartment}[1]{\renewcommand{\saus@department}{#1}}
+\newcommand{\sausevent}[1]{\renewcommand{\saus@event}{#1}}
+
+% Separator used in contact lines
+\newcommand{\saus@sep}{\hspace{0.7em}\textperiodcentered\hspace{0.7em}}
+
+% Asset shortcuts
+\newcommand{\sauslogo}{\saus@assets saus-logo.png}
+\newcommand{\sauslogowhite}{\saus@assets saus-logo-white.png}
+\newcommand{\sausasset}[1]{\saus@assets #1}
+
+%%--------------------------------------------------------------------------
+%% 4. TYPOGRAPHY
+%%    Build with LuaLaTeX (recommended) or XeLaTeX:
+%%      Fira Sans            text and headings     TeX Live package "fira"
+%%      Fira Math            mathematics           TeX Live package "firamath"
+%%      Fira Mono            code                  TeX Live package "fira"
+%%      EB Garamond          motto and quotations  TeX Live package "ebgaramond"
+%%      Lateef               Sindhi (Naskh)        bundled in assets/fonts
+%%      Noto Nastaliq Urdu   Urdu (Nastaliq)       bundled in assets/fonts
+%%    A missing TeX Live font falls back to TeX Gyre with a warning naming the
+%%    package to install. pdfLaTeX uses the Type 1 versions of Fira Sans and
+%%    EB Garamond, but cannot set Sindhi or Urdu.
+%%
+%%    Every typeface decision in this file goes through a role macro:
+%%      \sausdisplayfamily + \sausdisplayseries   headings and big numbers
+%%      \sauslightfont                            subtitles
+%%      \sauslabelfont                            small letterspaced capitals
+%%      \sausmottofont                            motto and quotations
+%%--------------------------------------------------------------------------
+\newif\ifsaus@unicode
+\ifPDFTeX\saus@unicodefalse\else\saus@unicodetrue\fi
+
+% Headings never hyphenate
+\newcommand{\saus@nohyphen}{\hyphenpenalty=10000\exhyphenpenalty=10000\relax}
+\providecommand{\sausls}[1]{#1}
+
+% Arabic-script family from assets/fonts: #1 command, #2 file stem, #3 language,
+% #4 scale. LuaLaTeX needs the HarfBuzz shaper for Nastaliq's joining rules.
+\newcommand{\saus@arabicfamily}[4]{%
+  \ifLuaTeX
+    \newfontfamily#1{#2}[Path=\saus@fontpath, Extension=.ttf,
+      UprightFont=*-Regular, BoldFont=*-Bold,
+      Script=Arabic, Language=#3, Scale=#4, Renderer=HarfBuzz]%
+  \else
+    \newfontfamily#1{#2}[Path=\saus@fontpath, Extension=.ttf,
+      UprightFont=*-Regular, BoldFont=*-Bold,
+      Script=Arabic, Language=#3, Scale=#4]%
+  \fi}
+
+\ifsaus@fonts
+  \ifsaus@unicode
+    \RequirePackage{fontspec}
+    \edef\saus@fontpath{\saus@assets fonts/}
+    % ---- Fira Sans: body in Regular, bold as SemiBold -------------------
+    \IfFontExistsTF{FiraSans-Regular.otf}{%
+      \setsansfont{FiraSans}[Extension=.otf, Ligatures=TeX,
+        UprightFont=*-Regular,  ItalicFont=*-Italic,
+        BoldFont=*-SemiBold,    BoldItalicFont=*-SemiBoldItalic]
+      \newfontfamily\saus@display{FiraSans}[Extension=.otf, Ligatures=TeX,
+        UprightFont=*-SemiBold, ItalicFont=*-SemiBoldItalic,
+        BoldFont=*-Bold,        BoldItalicFont=*-BoldItalic]
+      \newfontfamily\saus@displaylight{FiraSans}[Extension=.otf, Ligatures=TeX,
+        UprightFont=*-Light,    ItalicFont=*-LightItalic,
+        BoldFont=*-Medium,      BoldItalicFont=*-MediumItalic]
+    }{%
+      \PackageWarningNoLine{saus-brand}{Fira Sans not found. Install it
+        with `tlmgr install fira'. Falling back to TeX Gyre Heros}
+      \setsansfont{texgyreheros}[Extension=.otf, Ligatures=TeX,
+        UprightFont=*-regular, ItalicFont=*-italic,
+        BoldFont=*-bold,       BoldItalicFont=*-bolditalic]
+      \newfontfamily\saus@display{texgyreheros}[Extension=.otf, Ligatures=TeX,
+        UprightFont=*-bold, ItalicFont=*-bolditalic]
+      \newfontfamily\saus@displaylight{texgyreheros}[Extension=.otf, Ligatures=TeX,
+        UprightFont=*-regular, ItalicFont=*-italic,
+        BoldFont=*-bold,       BoldItalicFont=*-bolditalic]
+    }
+    % ---- Fira Mono --------------------------------------------------------
+    \IfFontExistsTF{FiraMono-Regular.otf}{%
+      \setmonofont{FiraMono}[Extension=.otf,
+        UprightFont=*-Regular, BoldFont=*-Bold, Scale=MatchLowercase]}{}
+    % ---- EB Garamond: motto, quotations, and \rmfamily -------------------
+    \IfFontExistsTF{EBGaramond-Italic.otf}{%
+      \setmainfont{EBGaramond}[Extension=.otf,
+        UprightFont=*-Regular, ItalicFont=*-Italic,
+        BoldFont=*-SemiBold,   BoldItalicFont=*-SemiBoldItalic]
+    }{%
+      \PackageWarningNoLine{saus-brand}{EB Garamond not found. Install it
+        with `tlmgr install ebgaramond'. Falling back to TeX Gyre Pagella}
+      \setmainfont{texgyrepagella}[Extension=.otf,
+        UprightFont=*-regular, ItalicFont=*-italic,
+        BoldFont=*-bold,       BoldItalicFont=*-bolditalic]
+    }
+    % ---- Mathematics through unicode-math: Fira Math, or Garamond-Math ------
+    \ifdefstring{\sausbrand@math}{garamond}{%
+      \IfFontExistsTF{Garamond-Math.otf}{%
+        \RequirePackage{unicode-math}
+        \setmathfont{Garamond-Math.otf}
+      }{%
+        \PackageWarningNoLine{saus-brand}{Garamond-Math not found. Install it
+          with `tlmgr install garamond-math'. Mathematics uses the default}
+      }%
+    }{%
+      \IfFontExistsTF{FiraMath-Regular.otf}{%
+        \RequirePackage{unicode-math}
+        \setmathfont{FiraMath-Regular.otf}
+      }{%
+        \PackageWarningNoLine{saus-brand}{Fira Math not found. Install it
+          with `tlmgr install firamath'. Mathematics uses Beamer's default}
+      }%
+    }
+    % ---- Sindhi and Urdu (bundled) ------------------------------------------
+    \saus@arabicfamily\saus@sindhifont{Lateef}{Sindhi}{1.3}
+    \saus@arabicfamily\saus@urdufont{NotoNastaliqUrdu}{Urdu}{0.95}
+
+    \newcommand{\sausdisplayfamily}{\saus@display\saus@nohyphen}
+    \newcommand{\sausdisplayseries}{\mdseries}
+    \newcommand{\sauslightfont}{\saus@displaylight\mdseries}
+    \newcommand{\sauslabelfont}{\saus@displaylight\bfseries}
+    \newcommand{\sausmottofont}{\rmfamily\itshape}
+    % Tracking for small capitals; fontspec does this in both engines
+    \renewcommand{\sausls}[1]{{\addfontfeatures{LetterSpace=9}#1}}
+  \else
+    % ---- pdfLaTeX: Type 1 Fira Sans and EB Garamond ---------------------
+    \RequirePackage[T1]{fontenc}
+    \IfFileExists{FiraSans.sty}{%
+      \RequirePackage[sfdefault]{FiraSans}%
+    }{%
+      \PackageWarningNoLine{saus-brand}{Fira Sans not found. Install it
+        with `tlmgr install fira'}%
+      \RequirePackage{tgheros}\renewcommand{\familydefault}{\sfdefault}%
+    }
+    \IfFileExists{ebgaramond.sty}{%
+      \RequirePackage{ebgaramond}%
+      \newcommand{\sausmottofont}{\rmfamily\itshape}%
+    }{}
+    \IfFileExists{microtype.sty}{\RequirePackage{microtype}}{}
+    \ifdefined\textls\renewcommand{\sausls}[1]{\textls[110]{#1}}\fi
+  \fi
+\fi
+\providecommand{\sausdisplayfamily}{\sffamily\saus@nohyphen}
+\providecommand{\sausdisplayseries}{\bfseries}
+\providecommand{\sauslightfont}{\mdseries}
+\providecommand{\sauslabelfont}{\bfseries}
+\providecommand{\sausmottofont}{\itshape}
+
+% Short right-to-left runs in Sindhi (Lateef) or Urdu (Nastaliq), for a name
+% or phrase on an English slide. For slides written entirely in Sindhi or
+% Urdu, load babel or polyglossia for full bidirectional layout instead.
+\ifdefined\saus@sindhifont
+  \ifXeTeX
+    \TeXXeTstate=1
+    \newcommand{\saussindhi}[1]{{\saus@sindhifont\beginR#1\endR}}
+    \newcommand{\sausurdu}[1]{{\saus@urdufont\beginR#1\endR}}
+  \else
+    \newcommand{\saussindhi}[1]{{\saus@sindhifont\textdir TRT#1}}
+    \newcommand{\sausurdu}[1]{{\saus@urdufont\textdir TRT#1}}
+  \fi
+\else
+  \newcommand{\saussindhi}[1]{\PackageWarning{saus-brand}{\string\saussindhi\space needs XeLaTeX or LuaLaTeX}[Sindhi text]}
+  \newcommand{\sausurdu}[1]{\PackageWarning{saus-brand}{\string\sausurdu\space needs XeLaTeX or LuaLaTeX}[Urdu text]}
+\fi
+
+% Official names in Sindhi and Urdu, usable anywhere in a slide.
+\newcommand{\sausnamesindhi}{\saussindhi{شيخ اياز يونيورسٽي، شڪارپور}}
+\newcommand{\sausnameurdu}{\sausurdu{شیخ ایاز یونیورسٹی، شکارپور}}
+
+% Native-script name printed under the motto on the title and closing
+% slides. Chosen with the native= option; \sausnativename{...} overrides it.
+% Only set when the Arabic-script fonts are available.
+% \saus@nativestack is the multi-line form for narrow spaces (the poster
+% header): with native=both it puts Sindhi and Urdu on separate lines.
+\newcommand{\saus@nativename}{}
+\newcommand{\saus@nativestack}{}
+\newcommand{\sausnativename}[1]{%
+  \renewcommand{\saus@nativename}{#1}\renewcommand{\saus@nativestack}{#1}}
+\ifdefined\saus@sindhifont
+  \ifdefstring{\saus@native}{sindhi}{\sausnativename{\sausnamesindhi}}{}
+  \ifdefstring{\saus@native}{urdu}{\sausnativename{\sausnameurdu}}{}
+  \ifdefstring{\saus@native}{both}{%
+    \sausnativename{\sausnamesindhi\saus@sep\sausnameurdu}%
+    \renewcommand{\saus@nativestack}{\sausnamesindhi\par\sausnameurdu}}{}
+\fi
+
+%%--------------------------------------------------------------------------
+%% 5. HELPERS (all sized relative to the current font, so they work on
+%%    slides and posters alike)
+%%--------------------------------------------------------------------------
+% Scale the current font size by #1
+\newcommand{\saus@relsize}[1]{%
+  \fontsize{\the\dimexpr#1\dimexpr\f@size pt\relax\relax}%
+           {\the\dimexpr1.07\dimexpr#1\dimexpr\f@size pt\relax\relax\relax}%
+  \selectfont}
+
+% The signature rule: maroon, gold, then a hairline to width #1.
+% Same proportions as the rule under every frame title.
+\newcommand{\sausrule}[1][\linewidth]{%
+  \leavevmode
+  {\color{sausmaroon}\rule[0.073em]{1.46em}{0.2em}}%
+  {\color{sausgold}\rule[0.073em]{0.64em}{0.2em}}%
+  {\color{sausrule}\rule[0.146em]{\dimexpr#1-2.1em\relax}{0.055em}}}
+
+% Paragraph divider using the signature rule
+\newcommand{\sausrulesep}{\par\vskip0.45em\sausrule\par\vskip0.45em}
+
+% Big number tile.  #1 = value, #2 = label. The figure takes the colour
+% saus@stat, which dark boxes (e.g. the poster's accent card) set to white.
+\colorlet{saus@stat}{sausmaroon}
+\colorlet{saus@statlabel}{sausslate}
+\newcommand{\sausstat}[2]{%
+  \begin{minipage}[t]{\linewidth}%
+    \raggedright
+    {\color{saus@stat}\sausdisplayfamily\sausdisplayseries\saus@relsize{2.55}#1}\\[0.27em]
+    {\color{sausgold}\rule{2.8em}{0.18em}}\\[0.55em]
+    {\color{saus@statlabel}\footnotesize #2}%
+  \end{minipage}%
+}
+
+% Emphasis helpers
+\newcommand{\sauskey}[1]{{\bfseries\color{sausmaroon}#1}}
+\newcommand{\saushl}[1]{\colorbox{sausgold!28}{#1}}
+
+\endinput

@@ -1,0 +1,15 @@
+% Renders the university's Sindhi and Urdu names as images for the
+% PowerPoint template (PowerPoint cannot be relied on to shape Nastaliq).
+% Build: lualatex native-names.tex, then pdftocairo -png -transp -r 600
+\documentclass{article}
+\usepackage[paperwidth=200mm,paperheight=40mm,margin=0mm]{geometry}
+\usepackage[assets=../../latex/assets/,native=none]{saus-brand}
+\pagestyle{empty}
+\newcommand{\page}[2]{\newpage\noindent\vbox to\paperheight{\vss
+  \hbox to\paperwidth{\hss\fontsize{40}{60}\selectfont\color{#1}#2\hss}\vss}}
+\begin{document}
+\page{white}{\sausnamesindhi}
+\page{sausmaroon}{\sausnamesindhi}
+\page{white}{\sausnameurdu}
+\page{sausmaroon}{\sausnameurdu}
+\end{document}

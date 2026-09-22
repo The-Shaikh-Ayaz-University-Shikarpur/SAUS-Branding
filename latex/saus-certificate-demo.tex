@@ -1,0 +1,52 @@
+%%==========================================================================
+%%  saus-certificate-demo.tex
+%%  Certificates of participation for a Department of Computer Science
+%%  training session, made from a CSV list of names (classic layout), and
+%%  a certificate of appreciation in the modern layout.
+%%  Compile with:  latexmk saus-certificate-demo.tex   (LuaLaTeX via .latexmkrc)
+%%==========================================================================
+% style     = classic (default) | modern
+% size      = a4 (default) | letter        -- always landscape
+% native    = both (default) | sindhi | urdu | none
+% sign      = 1 prints the signature images, 0 leaves space for a pen
+% seal      = true (default) | false       -- gold seal, classic layout
+% bandimage = default | none | <file>      -- photograph behind the modern band
+\documentclass[style=classic,sign=1]{saus-certificate}
+
+%% ---- Issuer ----------------------------------------------------------------
+\sausdepartment{Department of Computer Science}
+% A drawn specimen signature: keep real signatures out of shared templates.
+\signatory[assets/signature-specimen.png]{Head of Department}{Department of Computer Science}
+\signatory{Director}{IT Directorate}
+
+%% ---- Certificate text --------------------------------------------------------
+\certificatetitle{Certificate}{of Participation}
+\certificatebody{has participated in the training session
+  \textbf{University Templates for Lectures, Posters and Letters},
+  organised by the Department of Computer Science with the IT Directorate.}
+% \thecertificate numbers the certificates 001, 002, ...; 0 hides the number
+\certificateserial{SAUS/CS/TR/2026/\thecertificate}
+% QR code; \certificatenumber inside the address adds this certificate's number
+\certificateverify{https://saus.edu.pk}
+
+\begin{document}
+
+% One page per row of the CSV file (columns: name, serial)
+\makecertificatesfromcsv{saus-certificate-demo.csv}
+
+% A single certificate with its own title, text and layout
+\clearsignatories
+\signatory{Vice-Chancellor}{The Shaikh Ayaz University, Shikarpur}
+\sausdepartment{}
+\makecertificate[
+  style=modern,
+  title=Certificate,
+  subtitle=of Appreciation,
+  certify=Presented to,
+  serial=0,
+  body={in recognition of preparing the university's document templates,
+    which give its presentations, posters, letters and certificates one
+    consistent identity.}]
+  {IT Directorate}
+
+\end{document}

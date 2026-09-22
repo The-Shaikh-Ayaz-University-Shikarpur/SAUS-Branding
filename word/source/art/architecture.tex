@@ -1,0 +1,18 @@
+% The "shared brand layer" diagram from the thesis demo, as an image for Word.
+% Build: lualatex architecture.tex, then pdftocairo -png -r 300 -transp
+\documentclass[border=2mm]{standalone}
+\usepackage[assets=../../../latex/assets/,native=none]{saus-brand}
+\usepackage{tikz}
+\begin{document}
+\begin{tikzpicture}[
+    box/.style={draw=sausmaroon,fill=sausmist,rounded corners=2pt,
+      minimum width=24mm,minimum height=9mm,font=\sffamily\small},
+    brand/.style={box,fill=sausmaroon,text=white,minimum width=40mm},
+    >=stealth]
+  \node[brand] (brand) {saus-brand.sty};
+  \foreach \name/\x in {Slides/-54mm,Posters/-27mm,Letters/0mm,Certificates/27mm,Theses/54mm}
+    \node[box] (\name) at (\x,-22mm) {\name};
+  \foreach \name in {Slides,Posters,Letters,Certificates,Theses}
+    \draw[->,sausmaroonlight,thick] (brand.south) -- (\name.north);
+\end{tikzpicture}
+\end{document}
