@@ -82,7 +82,7 @@ Templates never name a font directly: they use the role macros
 ## Layout
 
 ```
-latex/          the five templates, the shared brand layer, starters, demos
+latex/          the six templates, the shared brand layer, starters, demos
   assets/       crest, campus photographs, bundled Sindhi/Urdu fonts
 powerpoint/     .potx + demo, built by source/build_pptx.py
 word/           letterhead and thesis .dotx + demos, built by source/build_*.py
