@@ -1,4 +1,4 @@
-# SAUS LaTeX templates — slides, posters, letters, certificates and theses
+# SAUS LaTeX templates — slides, posters, letters, certificates, theses and exams
 
 Beamer slides, research posters, official letterhead, certificates and
 final year project reports and theses for
@@ -19,6 +19,7 @@ changes with it.
 | `saus-letter.cls` | The letterhead class, built on KOMA-Script `scrlttr2`. |
 | `saus-certificate.cls` | The certificate class (classic and modern layouts). |
 | `saus-thesis.cls` | Final year project reports and theses, built on KOMA-Script `scrbook`. |
+| `saus-exam.cls` | Examination papers: mid-term, final-term, sessional, make-up. |
 | `saus-slides-starter.tex` | Minimal slide deck — copy this to start. |
 | `saus-slides-demo.tex` | Feature tour of every slide type. |
 | `saus-poster-starter.tex` | Minimal three-column poster — copy this to start. |
@@ -31,6 +32,8 @@ changes with it.
 | `saus-thesis-starter.tex` | Skeleton report: every field, the front matter and chapter headings. |
 | `saus-thesis-demo.tex` | A complete sample report showing every element. |
 | `saus-thesis-demo.bib` | The references used by the thesis demo (and the starter). |
+| `saus-exam-starter.tex` | A question paper to fill in — copy this to start. |
+| `saus-exam-demo.tex` | A final-term paper showing every element. |
 | `assets/` | Crest (colour and white line-art), campus photographs, and `fonts/`. |
 | `.latexmkrc` | Makes `latexmk` build with LuaLaTeX. |
 
@@ -517,6 +520,154 @@ Other details: `\subtitle`, `\cosupervisor{Name}{Designation}`, `\faculty`,
 `\submissiondate` (default: the current month), `\similarity{9\%}` and
 `\keywords`. For long reports, put each chapter in its own file and
 `\include` it.
+
+# Examinations
+
+`saus-exam.cls` sets a question paper: the printed heading with the course
+and paper details, the roll number strip, instructions, sections, numbered
+questions with their marks in the margin, and the marks distribution the
+examination office asks for. Start from `saus-exam-starter.tex`.
+
+```latex
+\documentclass[type=mid]{saus-exam}
+\sausdepartment{Department of Computer Science}
+\examcourse{CSC-201}{Data Structures and Algorithms}
+\examprogramme{BS Computer Science}
+\examsemester{III}
+\examsession{Spring 2026}
+\examdate{14 April 2026}
+\examduration{90 minutes}
+\exammarks{30}
+
+\begin{document}
+\makeexamhead
+\begin{instructions}
+  \item Attempt all questions in the answer book provided.
+\end{instructions}
+
+\question[marks=5, clo=1, bloom=Understand, topic=Complexity]
+Explain why binary search needs a sorted array.
+
+\examend
+\end{document}
+```
+
+`type=` names the paper — `mid` gives "Mid-Term Examination", `final`
+"Final-Term Examination", and there are `sessional`, `quiz`, `makeup`,
+`supplementary` and `practical`. `\examtitle{...}` overrides the wording for
+a paper the list does not cover.
+
+The heading prints only the details that are set, two to a row, so a quiz
+with three fields looks as deliberate as a final with nine. `\examcredits`
+and `\examteacher` are optional, and `\examinfo{Venue}{Examination Hall 2}`
+adds anything else, in label-and-value pairs.
+
+## Questions and marks
+
+`\question[...]` starts Q1, Q2, ...; `\qpart[...]` starts (a), (b), ...
+within a question. A question runs until the next question, the next section
+or `\examend`, so nothing has to be closed by hand.
+
+| Key | For |
+| --- | --- |
+| `marks=5` | The marks, printed in the margin and added to the total. |
+| `clo=2` | The course learning outcome, under the marks. |
+| `bloom=Apply` | The cognitive level, under the CLO. |
+| `topic=Recursion` | Named in the distribution table, not on the paper. |
+| `lines=6` | Six ruled lines after the question, to write the answer on. |
+| `space=45mm` | Blank space after the question instead of lines. |
+| `bonus` | A bonus question: shown as "+3" and left out of the total. |
+
+A question's marks sit in the right margin beside its first line; a part's
+sit at the end of the part, because two margin notes a line apart would
+collide. **Marks on a question already cover its parts**, so the parts'
+marks are a breakdown and are not counted twice; give the marks to the
+question, to its parts, or to both, and the total comes out the same.
+
+At the end of the run the class compares the questions with `\exammarks` and
+warns if they disagree — the check that is easy to get wrong by hand:
+
+```
+Class saus-exam Warning: The questions add up to 45, but \exammarks says 50.
+```
+
+`\examsection[20 marks]{Section B: Short questions}` puts a maroon band
+across the page, and neither a section nor a question is left stranded at
+the foot of a page. `\examend` prints the "End of question paper" marker.
+
+## Multiple choice and answer space
+
+```latex
+\begin{choices}[cols=4]     % cols=2 is the default
+  \choice $O(1)$
+  \correctchoice $O(\log n)$
+  \choice $O(n)$
+  \choice $O(n\log n)$
+\end{choices}
+```
+
+`\correctchoice` is set like any other choice on the paper, and in green
+bold when the file is built as the answer key. Besides `lines=` and
+`space=`, `\answerlines{6}`, `\answerspace[35mm]` and `\answerbox[40mm]`
+(a framed box for a diagram) can be placed anywhere.
+
+## The answer key
+
+Put the model answer in a `solution` environment. It is printed only when
+the paper is built with `solutions=1`, so one file gives both the paper and
+the key:
+
+```latex
+\begin{solution}
+  Every comparison halves the interval, so the search is $O(\log n)$.
+\end{solution}
+```
+
+Either add `solutions=1` to the `\documentclass` line when the key is
+wanted, or keep both as files that build side by side — a two-line wrapper
+next to the paper, so the questions are written once:
+
+```latex
+% cs201-final-key.tex
+\PassOptionsToClass{solutions=1}{saus-exam}
+\input{cs201-final}
+```
+
+The key carries a "Model answer key" badge under the title, so a copy on a
+desk cannot be mistaken for a question paper.
+
+## Marks tables
+
+- `\sausmarkstable` — the marks and CLO distribution: one row per question
+  with its topic, CLO, cognitive level and marks, and the total. It is for
+  the paper setter and the examination office; put it on a page of its own
+  at the end and delete that page before the candidates' copies are printed.
+- `\sausmarksgrid` — the examiner's grid: a column for each question, a
+  total, and lines for the examiner's signature and the date. Put it on the
+  front page of a paper that is answered on the question paper itself.
+
+Both are built from the questions themselves through the `.aux` file, so
+they need **two runs**; `latexmk` does that for you, and the class says
+"Rerun to fill the examiner's grid" when a single run is not enough.
+
+## Class options
+
+| Option | Values | Default | Effect |
+| --- | --- | --- | --- |
+| `type` | `mid`, `final`, `sessional`, `quiz`, `makeup`, `supplementary`, `practical` | `mid` | Names the paper. |
+| `solutions` | `1`, `0` | `0` | `1`: model answers and the correct choices. |
+| `clo` | `1`, `0` | `1` | CLO and cognitive level in the margin. |
+| `student` | `1`, `0` | `1` | Roll number strip under the heading. |
+| `rollhead` | `1`, `0` | `1` | "Roll No." in the running head of later pages. |
+| `fontsize` | `10pt`, `11pt`, `12pt` | `12pt` | Body type size. |
+| `native` | `both`, `sindhi`, `urdu`, `none` | `both` | Names in the heading. |
+| `assets` | path **with trailing slash** | `assets/` | Where the crest and fonts live. |
+| `fonts` | `true`, `false` | `true` | Use the brand typefaces. |
+
+A paper set in Sindhi or Urdu uses `\saussindhi{...}` and `\sausurdu{...}`
+for runs of text, as everywhere else in the suite; for a paper written
+entirely in either language, load `polyglossia` for full right-to-left
+layout.
 
 # Brand
 

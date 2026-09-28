@@ -1,0 +1,70 @@
+%%==========================================================================
+%%  saus-exam-starter.tex
+%%  A question paper for THE SHAIKH AYAZ UNIVERSITY, SHIKARPUR.
+%%  Copy this file, fill in the details and write the questions.
+%%  Compile with:  latexmk saus-exam-starter.tex   (LuaLaTeX via .latexmkrc)
+%%
+%%  Two runs settle the marks table and "Page 1 of n"; latexmk does that.
+%%==========================================================================
+% type       = mid (default) | final | sessional | quiz | makeup
+%              | supplementary | practical      -- names the paper
+% solutions  = 0 (default) | 1                  -- 1 prints the answer key
+% clo        = 1 (default) | 0                  -- CLO and level in the margin
+% student    = 1 (default) | 0                  -- roll number strip
+% rollhead   = 1 (default) | 0                  -- "Roll No." on later pages
+% fontsize   = 12pt (default) | 11pt | 10pt
+\documentclass[type=mid]{saus-exam}
+
+%% ---- The paper -------------------------------------------------------------
+\sausdepartment{Department of Computer Science}
+\examcourse{CSC-201}{Data Structures and Algorithms}
+\examprogramme{BS Computer Science}
+\examsemester{III}
+\examsession{Spring 2026}
+\examdate{14 April 2026}
+\examduration{90 minutes}
+\exammarks{30}
+% \examcredits{3 (3-0)}                 % optional
+% \examteacher{Name of the teacher}     % optional
+% \examinfo{Venue}{Examination Hall 2}  % any further detail, in pairs
+% \examtitle{Pre-Board Examination}     % overrides the wording of type=
+
+\begin{document}
+\makeexamhead
+
+\begin{instructions}
+  \item Attempt all questions in the answer book provided.
+  \item Marks for each question are shown in the margin.
+  \item Programmable calculators and mobile telephones are not allowed.
+\end{instructions}
+
+%% ---- Questions -------------------------------------------------------------
+%% \question takes marks, clo, bloom and topic; clo, bloom and topic feed the
+%% distribution table at the end. lines=n or space=40mm leaves room to write.
+\examsection[10 marks]{Section A: Short questions}
+
+\question[marks=5, clo=1, bloom=Understand, topic=Complexity]
+Write the question here.
+
+\question[marks=5, clo=2, bloom=Apply, topic=Stacks, lines=6]
+A question answered on the paper itself, with six ruled lines after it.
+
+\examsection[20 marks]{Section B: Long questions}
+
+\question[marks=20, clo=3, bloom=Analyse, topic=Sorting]
+A question in parts. The marks on the question cover its parts, so the
+parts' own marks are not counted twice.
+\qpart[marks=12]
+The first part.
+\qpart[marks=8]
+The second part.
+
+% \question[marks=3, bonus, clo=3] Bonus questions are left out of the total.
+
+\examend
+
+%% ---- For the department's file ---------------------------------------------
+%% Delete this page before printing the candidates' copies.
+\clearpage
+\sausmarkstable
+\end{document}

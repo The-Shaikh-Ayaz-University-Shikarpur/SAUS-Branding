@@ -2,7 +2,7 @@
 
 Brand templates for **The Shaikh Ayaz University, Shikarpur** — *Revival of
 Educational Glory of Shikarpur*. Slides, posters, letterhead, certificates and
-theses in LaTeX, and matching PowerPoint, Word and Excel templates, so that
+theses and examination papers in LaTeX, and matching PowerPoint, Word and Excel templates, so that
 anything the university issues looks like it came from the same place.
 
 saus.edu.pk · Main Road, Shikarpur, Sindh · +92 726 512039
@@ -17,6 +17,7 @@ saus.edu.pk · Main Road, Shikarpur, Sindh · +92 726 512039
 | | Official letterhead | [`latex/saus-letter-starter.tex`](latex/saus-letter-starter.tex) |
 | | Certificates, singly or from a CSV list | [`latex/saus-certificate-starter.tex`](latex/saus-certificate-starter.tex) |
 | | Final year project report or thesis | [`latex/saus-thesis-starter.tex`](latex/saus-thesis-starter.tex) |
+| | Examination paper, mid-term or final | [`latex/saus-exam-starter.tex`](latex/saus-exam-starter.tex) |
 | **PowerPoint** | Deck, 16 slide layouts | `powerpoint/SAUS-template.potx` |
 | **Word** | Letterhead, any office | `word/SAUS-letterhead.dotx` |
 | | FYP report and thesis | `word/SAUS-thesis-FYP.dotx`, `word/SAUS-thesis.dotx` |
@@ -26,7 +27,8 @@ Every template has a demo next to it — a feature tour with the built file
 committed, so you can see what you get before compiling anything:
 [slides](latex/saus-slides-demo.pdf) · [poster](latex/saus-poster-demo.pdf) ·
 [letter](latex/saus-letter-demo.pdf) · [certificate](latex/saus-certificate-demo.pdf) ·
-[thesis](latex/saus-thesis-demo.pdf) · `powerpoint/SAUS-slides-demo.pptx` ·
+[thesis](latex/saus-thesis-demo.pdf) · [exam paper](latex/saus-exam-demo.pdf) ·
+`powerpoint/SAUS-slides-demo.pptx` ·
 `word/SAUS-letter-demo.docx` · `word/SAUS-thesis-demo.docx` ·
 `excel/SAUS-workbook-demo.xlsx`.
 
@@ -59,7 +61,7 @@ folder and set the compiler to LuaLaTeX.
 
 ## The brand in one place
 
-All five LaTeX templates load one shared layer,
+All six LaTeX templates load one shared layer,
 [`latex/saus-brand.sty`](latex/saus-brand.sty) — colours, typography, the
 university's details, Sindhi and Urdu support. Change it there and every
 template follows. The Office templates carry the same palette in their document

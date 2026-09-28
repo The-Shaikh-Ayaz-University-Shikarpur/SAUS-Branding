@@ -1,0 +1,177 @@
+%%==========================================================================
+%%  saus-exam-demo.tex
+%%  A final-term paper showing every element of saus-exam.cls: the heading,
+%%  the examiner's grid, instructions, sections, multiple-choice items,
+%%  questions in parts, a table, an equation, code, answer space, bonus
+%%  marks, model answers and the marks/CLO distribution table.
+%%  Compile with:  latexmk saus-exam-demo.tex   (LuaLaTeX via .latexmkrc)
+%%
+%%  For the answer key from this same file, put these two lines in a file of
+%%  their own and compile that instead:
+%%    \PassOptionsToClass{solutions=1}{saus-exam}
+%%    \input{saus-exam-demo}
+%%==========================================================================
+% type = mid | final | sessional | quiz | makeup | supplementary | practical
+% solutions = 1 prints the model answers and marks the correct choices
+\documentclass[type=final]{saus-exam}
+
+%% ---- The paper -------------------------------------------------------------
+\sausdepartment{Department of Computer Science}
+\examcourse{CSC-201}{Data Structures and Algorithms}
+\examprogramme{BS Computer Science}
+\examsemester{III}
+\examsession{Spring 2026}
+\examdate{16 June 2026}
+\examduration{3 hours}
+\exammarks{50}
+\examcredits{3 (3-0)}
+\examinfo{Venue}{Examination Hall 2}
+
+\begin{document}
+\makeexamhead
+
+\begin{instructions}
+  \item Attempt \textbf{all} questions. Section A is answered on this paper;
+        Sections B and C in the answer book provided.
+  \item The marks for each question are shown in the margin, with the course
+        learning outcome it assesses.
+  \item Programmable calculators, mobile telephones and smart watches are not
+        allowed in the examination hall.
+  \item Write your roll number on every sheet of the answer book.
+\end{instructions}
+
+\sausmarksgrid
+
+\examsection[10 marks]{Section A: Multiple choice}
+
+\question[marks=2, clo=1, bloom=Remember, topic=Complexity]
+What is the worst-case time complexity of binary search on a sorted array
+of $n$ elements?
+\begin{choices}[cols=4]
+  \choice $O(1)$
+  \correctchoice $O(\log n)$
+  \choice $O(n)$
+  \choice $O(n\log n)$
+\end{choices}
+\begin{solution}
+  Every comparison halves the interval that may still contain the key, so at
+  most $\lfloor\log_2 n\rfloor+1$ comparisons are made.
+\end{solution}
+
+\question[marks=2, clo=1, bloom=Understand, topic=Stacks and queues]
+Which structure serves its items in last-in, first-out order?
+\begin{choices}
+  \choice Queue
+  \correctchoice Stack
+  \choice Priority queue
+  \choice Circular buffer
+\end{choices}
+
+\question[marks=2, clo=1, bloom=Understand, topic=Trees]
+A binary search tree holding $n$ keys has height $h$. Searching it takes
+time proportional to:
+\begin{choices}
+  \choice $n$ in every case
+  \correctchoice $h$, which is $\log n$ only when the tree is balanced
+  \choice $\log n$ in every case
+  \choice $n\log n$ in the worst case
+\end{choices}
+
+\question[marks=2, clo=2, bloom=Apply, topic=Hashing]
+Separate chaining resolves a collision by:
+\begin{choices}
+  \choice probing the next free slot
+  \correctchoice keeping a list of the entries that share a slot
+  \choice enlarging the table on every insertion
+  \choice rehashing with a second function
+\end{choices}
+
+\question[marks=2, clo=2, bloom=Apply, topic=Graphs]
+Breadth-first search on an unweighted graph finds:
+\begin{choices}
+  \choice the minimum spanning tree
+  \correctchoice the shortest path in edges from the source
+  \choice the strongly connected components
+  \choice a topological order
+\end{choices}
+
+\examsection[20 marks]{Section B: Short questions}
+
+\question[marks=5, clo=2, bloom=Apply, topic=Recursion]
+Write a recursive function that returns the height of a binary tree, and
+state its running time in terms of the number of nodes.
+\begin{solution}
+  The height of an empty tree is $-1$; otherwise it is one more than the
+  greater of the heights of the two subtrees. Every node is visited once, so
+  the function runs in $O(n)$ time and uses $O(h)$ stack space.
+\end{solution}
+
+\question[marks=5, clo=2, bloom=Analyse, topic=Sorting]
+Complete the table below, and say which of the three you would choose for
+an array that is already nearly sorted.
+\begin{center}
+  \small
+  \begin{tabular}{|l|l|l|l|}
+    \hline
+    \rowcolor{sausmist}
+    \textbf{Algorithm}&\textbf{Best}&\textbf{Average}&\textbf{Worst}\\
+    \hline
+    Insertion sort&$O(n)$&&\\
+    \hline
+    Merge sort&&$O(n\log n)$&\\
+    \hline
+    Quicksort&&&\\
+    \hline
+  \end{tabular}
+\end{center}
+
+\question[marks=5, clo=3, bloom=Analyse, topic=Complexity]
+The running time of a divide-and-conquer algorithm satisfies
+\begin{equation*}
+  T(n) = 2\,T\!\left(\frac{n}{2}\right) + \Theta(n), \qquad T(1)=\Theta(1).
+\end{equation*}
+Solve the recurrence and name an algorithm whose running time it describes.
+
+\question[marks=5, clo=3, bloom=Evaluate, topic=Data structure choice,
+          lines=6]
+A campus application keeps the 815 enrolled students in memory and looks a
+student up by roll number thousands of times a minute, while enrolments are
+added only a few times a day. Recommend a data structure and justify the
+choice in terms of the operations' costs.
+
+\examsection[20 marks]{Section C: Long questions}
+
+\question[marks=10, clo=3, bloom=Analyse, topic=Sorting]
+Consider the array $[38, 27, 43, 3, 9, 82, 10]$.
+\qpart[marks=6]
+Trace merge sort on it, showing the contents of the array after every merge.
+\qpart[marks=4]
+Count the comparisons merge sort makes on this input and compare the number
+with insertion sort on the same input.
+
+\question[marks=10, clo=4, bloom=Create, topic=Hashing]
+A hash table stores the courses a department offers, keyed by course code.
+\qpart[marks=4]
+Write the insertion routine for separate chaining. One line of code per line
+of the answer book:
+\begin{center}\small
+  \texttt{def insert(table, key, value):}
+\end{center}
+\qpart[marks=6, space=45mm]
+The table has 16 slots and holds 40 courses. Explain what the load factor
+does to the cost of a lookup, and describe one way to keep the cost near
+constant as the department adds courses. Use the space below for a diagram.
+
+\question[marks=3, bonus, clo=4, bloom=Create, topic=Open question]
+State one change to the hash table above that would make its iteration order
+predictable, and what it would cost.
+
+\examend
+
+%% ---- For the department's file ---------------------------------------------
+%% The distribution table is for the paper setter and the examination office.
+%% Delete this page before printing the candidates' copies.
+\clearpage
+\sausmarkstable
+
+\end{document}
