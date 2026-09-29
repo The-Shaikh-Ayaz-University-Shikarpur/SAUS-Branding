@@ -1,8 +1,9 @@
-# SAUS Word templates: letterhead and theses
+# SAUS Word templates: letterhead, theses and examination papers
 
-The Word versions of the LaTeX letterhead (`../latex/saus-letter.cls`) and
-thesis class (`../latex/saus-thesis.cls`) for **The Shaikh Ayaz University,
-Shikarpur**, with the same layout, typefaces and details.
+The Word versions of the LaTeX letterhead (`../latex/saus-letter.cls`), thesis
+class (`../latex/saus-thesis.cls`) and examination paper
+(`../latex/saus-exam.cls`) for **The Shaikh Ayaz University, Shikarpur**, with
+the same layout, typefaces and details.
 
 | File | What it is |
 | --- | --- |
@@ -12,6 +13,8 @@ Shikarpur**, with the same layout, typefaces and details.
 | `SAUS-thesis-FYP.dotx` | Final year project report (BS): "project report", group of students. |
 | `SAUS-thesis.dotx` | MS, MPhil or PhD thesis: "thesis", one student. |
 | `SAUS-thesis-demo.docx` | The LaTeX demo report rebuilt in Word. |
+| `SAUS-exam.dotx` | Examination paper: mid-term, final-term, sessional or make-up. |
+| `SAUS-exam-demo.docx` | The LaTeX demo final-term paper rebuilt in Word. |
 | `source/` | The build scripts, a PDF export script and a field-update script. |
 
 ## Setting up
@@ -112,6 +115,62 @@ For references, Word's own **References > Insert Citation** (style IEEE) or a
 reference manager such as Zotero or Mendeley both work with the SAUS Reference
 style.
 
+# Examination papers
+
+`SAUS-exam.dotx` is a question paper to fill in: the heading with the course
+and paper details, the roll number strip, the instructions, the examiner's
+grid, sections, numbered questions and the marks distribution for the
+examination office. Double-click it to start a paper; every field to fill in
+is grey.
+
+- **The kind of paper** is a dropdown on the title: click "Mid-Term
+  Examination" and choose the final-term, sessional, quiz, make-up,
+  supplementary or practical wording.
+- **The details grid** shows only what it is given; clear a field you do not
+  need and delete its row. The course code and the total marks are repeated in
+  the footer of every page.
+- **The date** opens a calendar and writes "16 June 2026".
+
+## Writing the questions
+
+| To add | Do this |
+| --- | --- |
+| A question | Apply **SAUS Question**; Word numbers it Q1, Q2, ... |
+| A part | Apply **SAUS Part** for (a), (b), ... within a question. |
+| The marks | At the end of the question, press **Tab** and type them in the **SAUS Marks** style, e.g. `[5 marks · CLO 2]`. |
+| A section | Apply **SAUS Section** ("Section A: Multiple choice"), Tab, then the section's marks. |
+| Multiple choice | A borderless table, two or four columns; copy one from the demo. |
+| Room to write | Apply **SAUS Answer Line** to empty paragraphs — each one rules a line. |
+| Code | One **SAUS Code** paragraph per line. |
+| Urdu or Sindhi | The **SAUS Urdu** (Nastaliq) or **SAUS Sindhi** (Lateef) style, right to left. |
+
+## The answer key
+
+Put the model answer in a **SAUS Answer** paragraph, and mark the right choice
+with a tick in the **SAUS Answer Tick** style, as the demo does. Both are
+**hidden text**: they never appear on the printed paper, so one file is the
+paper and the key.
+
+- To read them while setting the paper, turn on **Home > ¶** (Show formatting
+  marks); hidden text then appears with a dotted underline.
+- To print the key, turn on **File > Options > Display > Print hidden text**,
+  print, and turn it off again. That option is the only thing standing between
+  the paper and the answers, so check it is off before printing the paper.
+
+## Before printing
+
+Press **Ctrl+A**, then **F9**. That refreshes the page numbers, the course code
+and total marks repeated in the footer, and the total in the marks and CLO
+distribution table, which is a `SUM(ABOVE)` field.
+
+The distribution table is for the paper setter and the examination office:
+delete its page before the candidates' copies are printed.
+
+**What differs from the LaTeX class.** The marks sit at the end of a question
+rather than in the margin — Word has no dependable margin note that survives
+editing — and nothing adds the marks up for you as the LaTeX class does, so
+the marks table is filled in by hand. Everything else matches.
+
 ## Rebuilding
 
 The files are generated; change `source/build_docx.py` rather than editing
@@ -121,7 +180,9 @@ them by hand:
 pip install -r ../requirements.txt
 python source/build_docx.py                 # letterhead
 python source/build_thesis_docx.py          # thesis templates and demo
+python source/build_exam_docx.py            # examination paper and demo
 powershell -File source/finalize.ps1 SAUS-thesis-demo.docx SAUS-thesis-FYP.dotx SAUS-thesis.dotx
+powershell -File source/finalize.ps1 SAUS-exam-demo.docx SAUS-exam.dotx
 ```
 
 `finalize.ps1` opens each file in Word, updates the contents, lists and

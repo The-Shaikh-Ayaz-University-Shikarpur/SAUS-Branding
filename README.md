@@ -21,6 +21,7 @@ saus.edu.pk · Main Road, Shikarpur, Sindh · +92 726 512039
 | **PowerPoint** | Deck, 16 slide layouts | `powerpoint/SAUS-template.potx` |
 | **Word** | Letterhead, any office | `word/SAUS-letterhead.dotx` |
 | | FYP report and thesis | `word/SAUS-thesis-FYP.dotx`, `word/SAUS-thesis.dotx` |
+| | Examination paper | `word/SAUS-exam.dotx` |
 | **Excel** | Workbook: brand theme, tables, charts | `excel/SAUS-workbook.xltx` |
 
 Every template has a demo next to it — a feature tour with the built file
@@ -30,7 +31,7 @@ committed, so you can see what you get before compiling anything:
 [thesis](latex/saus-thesis-demo.pdf) · [exam paper](latex/saus-exam-demo.pdf) ·
 `powerpoint/SAUS-slides-demo.pptx` ·
 `word/SAUS-letter-demo.docx` · `word/SAUS-thesis-demo.docx` ·
-`excel/SAUS-workbook-demo.xlsx`.
+`word/SAUS-exam-demo.docx` · `excel/SAUS-workbook-demo.xlsx`.
 
 Each folder has its own guide, and that is where the detail lives:
 **[latex/README.md](latex/README.md)** · [powerpoint](powerpoint/README.md) ·
@@ -98,7 +99,9 @@ The Office files are **generated**. Change the script in that folder's
 pip install -r requirements.txt
 python powerpoint/source/build_pptx.py
 python word/source/build_docx.py && python word/source/build_thesis_docx.py
+python word/source/build_exam_docx.py
 powershell -File word/source/finalize.ps1 word/SAUS-thesis-demo.docx word/SAUS-thesis-FYP.dotx word/SAUS-thesis.dotx
+powershell -File word/source/finalize.ps1 word/SAUS-exam-demo.docx word/SAUS-exam.dotx
 python excel/source/build_xlsx.py
 ```
 
